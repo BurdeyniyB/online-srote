@@ -85,5 +85,5 @@ module.exports = {
   DeviceInfo,
   Type,
   Brand,
-  TypeBrand
+  TypeBrand,
 };
