@@ -46,36 +46,30 @@ const DeviceInfo = sequelize.define("device_info", {
   description: { type: DataTypes.STRING, allowNull: false },
 });
 
-const TypeBrand = sequelize.define("type_brand", {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-});
-
+// Зв’язки
 User.hasOne(Basket);
 Basket.belongsTo(User);
 
-BasketDevice.hasMany(Basket);
-Basket.belongsTo(BasketDevice);
+Basket.hasMany(BasketDevice);
+BasketDevice.belongsTo(Basket);
 
-BasketDevice.hasOne(Device);
-Device.belongsTo(BasketDevice);
+BasketDevice.belongsTo(Device);
+Device.hasMany(BasketDevice);
 
-Device.hasMany(DeviceInfo);
+Device.hasMany(DeviceInfo, { as: "info" });
 DeviceInfo.belongsTo(Device);
 
-Device.hasMany(Brand);
-Brand.belongsTo(Device);
+Brand.hasMany(Device); // Один бренд → багато пристроїв
+Device.belongsTo(Brand); // Один пристрій → один бренд
 
-Device.hasMany(Type);
-Type.belongsTo(Device);
+Type.hasMany(Device); // Один тип → багато пристроїв
+Device.belongsTo(Type); // Один пристрій → один тип
 
-Device.hasOne(Rating);
-Rating.belongsTo(Device);
+Device.hasMany(Rating); // Один пристрій → багато оцінок
+Rating.belongsTo(Device); // Одна оцінка → один пристрій
 
-Rating.hasMany(User);
-User.belongsTo(Rating);
-
-Type.belongsToMany(Brand, { through: TypeBrand });
-Brand.belongsToMany(Type, { through: TypeBrand });
+User.hasMany(Rating); // Один користувач → багато оцінок
+Rating.belongsTo(User); // Одна оцінка → один користувач
 
 module.exports = {
   User,
@@ -86,5 +80,4 @@ module.exports = {
   DeviceInfo,
   Type,
   Brand,
-  TypeBrand,
 };
