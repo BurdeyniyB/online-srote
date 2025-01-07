@@ -3,19 +3,45 @@ import { makeAutoObservable } from "mobx";
 export default class DeviceStore {
   constructor() {
     this._types = [
-        {id:1, name: 'Phone'},
-        {id:2, name: 'HeadPhone'}
-    ]
+      { id: 1, name: "Phone" },
+      { id: 2, name: "Headphone" },
+    ];
     this._brands = [
-        {id:1, name: 'Samsung'},
-        {id:2, name: 'Apple'}
-    ]
+      { id: 1, name: "Samsung" },
+      { id: 2, name: "Apple" },
+    ];
     this._devices = [
-        {id:1, name: 'Iphone 12 pro', descriprion: 'description iphone 12 pro', price: 25000, img: 'https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwj01MqBgOGKAxXAWpEFHYFHIzsYABAVGgJscg&ae=2&aspm=1&co=1&ase=2&gclid=CjwKCAiAm-67BhBlEiwAEVftNr2IShifLJHCxSW_qNLrIdELUVgeGuz9_tF-1FLw0qztvpJEsBZcCxoCjfsQAvD_BwE&ohost=www.google.com&cid=CAESV-D2EgC0dim019uWxK7AIXns567E_Wwb0JEIQDv-U0qcG6ehuVaete-aI7FJwRn-fvuDwEgUR85SbHtNk_AY9jl4l3WZCohdGA5zDwTarpZgyn6cz_4cbw&sig=AOD64_24gZpQZh71vtZF8J1EEPK0pMDaGA&ctype=5&q=&nis=4&ved=2ahUKEwj0kcWBgOGKAxVIHRAIHesIMOwQwg8oAXoECAkQCw&adurl='},
-        {id:2, name: 'Iphone 12 pro', descriprion: 'description iphone 12 pro', price: 25000, img: 'https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwj01MqBgOGKAxXAWpEFHYFHIzsYABAVGgJscg&ae=2&aspm=1&co=1&ase=2&gclid=CjwKCAiAm-67BhBlEiwAEVftNr2IShifLJHCxSW_qNLrIdELUVgeGuz9_tF-1FLw0qztvpJEsBZcCxoCjfsQAvD_BwE&ohost=www.google.com&cid=CAESV-D2EgC0dim019uWxK7AIXns567E_Wwb0JEIQDv-U0qcG6ehuVaete-aI7FJwRn-fvuDwEgUR85SbHtNk_AY9jl4l3WZCohdGA5zDwTarpZgyn6cz_4cbw&sig=AOD64_24gZpQZh71vtZF8J1EEPK0pMDaGA&ctype=5&q=&nis=4&ved=2ahUKEwj0kcWBgOGKAxVIHRAIHesIMOwQwg8oAXoECAkQCw&adurl='},
-        {id:3, name: 'Iphone 12 pro', descriprion: 'description iphone 12 pro', price: 25000, img: 'https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwj01MqBgOGKAxXAWpEFHYFHIzsYABAVGgJscg&ae=2&aspm=1&co=1&ase=2&gclid=CjwKCAiAm-67BhBlEiwAEVftNr2IShifLJHCxSW_qNLrIdELUVgeGuz9_tF-1FLw0qztvpJEsBZcCxoCjfsQAvD_BwE&ohost=www.google.com&cid=CAESV-D2EgC0dim019uWxK7AIXns567E_Wwb0JEIQDv-U0qcG6ehuVaete-aI7FJwRn-fvuDwEgUR85SbHtNk_AY9jl4l3WZCohdGA5zDwTarpZgyn6cz_4cbw&sig=AOD64_24gZpQZh71vtZF8J1EEPK0pMDaGA&ctype=5&q=&nis=4&ved=2ahUKEwj0kcWBgOGKAxVIHRAIHesIMOwQwg8oAXoECAkQCw&adurl='},
-        {id:4, name: 'Iphone 12 pro', descriprion: 'description iphone 12 pro', price: 25000, img: 'https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwj01MqBgOGKAxXAWpEFHYFHIzsYABAVGgJscg&ae=2&aspm=1&co=1&ase=2&gclid=CjwKCAiAm-67BhBlEiwAEVftNr2IShifLJHCxSW_qNLrIdELUVgeGuz9_tF-1FLw0qztvpJEsBZcCxoCjfsQAvD_BwE&ohost=www.google.com&cid=CAESV-D2EgC0dim019uWxK7AIXns567E_Wwb0JEIQDv-U0qcG6ehuVaete-aI7FJwRn-fvuDwEgUR85SbHtNk_AY9jl4l3WZCohdGA5zDwTarpZgyn6cz_4cbw&sig=AOD64_24gZpQZh71vtZF8J1EEPK0pMDaGA&ctype=5&q=&nis=4&ved=2ahUKEwj0kcWBgOGKAxVIHRAIHesIMOwQwg8oAXoECAkQCw&adurl='}
-    ]
+      {
+        id: 1,
+        name: "Iphone 12 pro",
+        descriprion: "description iphone 12 pro",
+        price: 25000,
+        img: "https://cdn.new-brz.net/app/public/models/MGMN3/large/w/201230150020239921.webp",
+      },
+      {
+        id: 2,
+        name: "Iphone 12 pro",
+        descriprion: "description iphone 12 pro",
+        price: 25000,
+        img: "https://cdn.new-brz.net/app/public/models/MGMN3/large/w/201230150020239921.webp",
+      },
+      {
+        id: 3,
+        name: "Iphone 12 pro",
+        descriprion: "description iphone 12 pro",
+        price: 25000,
+        img: "https://cdn.new-brz.net/app/public/models/MGMN3/large/w/201230150020239921.webp",
+      },
+      {
+        id: 4,
+        name: "Iphone 12 pro",
+        descriprion: "description iphone 12 pro",
+        price: 25000,
+        img: "https://cdn.new-brz.net/app/public/models/MGMN3/large/w/201230150020239921.webp",
+      },
+    ];
+    this._selectedType = {}
+    this._selectedBrand = {}
     makeAutoObservable(this);
   }
 
@@ -31,15 +57,30 @@ export default class DeviceStore {
     this._devices = devices;
   }
 
-  get Types() {
+  setSelectedType(type){
+    this._selectedType = type;
+  }
+  
+  setSelectedBrand(brand){
+    this._selectedBrand = brand;
+  }
+
+  get types() {
     return this._types;
   }
 
-  get Brands() {
+  get brands() {
     return this._brands;
   }
 
-  get Devices() {
+  get devices() {
     return this._devices;
+  }
+  get selectedType(){
+    return this._selectedType;
+  }
+
+  get selectedBrand(){
+    return this._selectedBrand;
   }
 }
