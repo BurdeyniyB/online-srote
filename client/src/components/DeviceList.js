@@ -5,15 +5,15 @@ import { Row } from "react-bootstrap";
 import DeviceItem from "./DeviceItem";
 
 const DeviceList = observer(() => {
-    const {device} = useContext(Context);
+  const { device } = useContext(Context);
 
-    return(
-        <Row className="d-flex m-3">
-            {device.devices.map(device =>
-               <DeviceItem key={device.id} device={device}></DeviceItem>
-               )}
-        </Row>
-    )
-})
+  return (
+    <Row className="d-flex mt-3">
+      {device.devices.map((device) => (
+        <DeviceItem key={device.id} device={device}></DeviceItem>
+      ))}
+    </Row>
+  );
+});
 
 export default DeviceList;
