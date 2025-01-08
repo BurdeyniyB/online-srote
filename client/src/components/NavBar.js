@@ -17,10 +17,18 @@ const NavBar = observer(() => {
   const { user } = useContext(Context);
   const navigate = useNavigate();
   const expand = "xxl";
+
+  const logOut = () => {
+    user.setUser({});
+    user.setIsAuth(false);
+  };
+
   return (
     <Navbar key={expand} expand={expand} style={{ backgroundColor: "#f7f7f7" }}>
       <Container fluid>
-        <NavLink style={{color: "black"}} to={STORE_ROUTE}>Online store</NavLink>
+        <NavLink style={{ color: "black" }} to={STORE_ROUTE}>
+          Online store
+        </NavLink>
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
         <Navbar.Offcanvas
           id={`offcanvasNavbar-expand-${expand}`}
@@ -44,14 +52,9 @@ const NavBar = observer(() => {
               <Button variant="outline-dark" className="custom-button">
                 Search
               </Button>
-              <Button
-                className="custom-button"
-                variant="outline-dark"
-                onClick={() => navigate(LOGIN_ROUTE)}
-              >
-                Authorization
-              </Button>
-              {user.isAuth && (
+            </Form>
+            {user.isAuth ? (
+              <Nav className="ml-auto" style={{ height: 40 }}>
                 <Button
                   className="custom-button"
                   variant="outline-dark"
@@ -59,8 +62,25 @@ const NavBar = observer(() => {
                 >
                   Admin
                 </Button>
-              )}
-            </Form>
+                <Button
+                  className="custom-button"
+                  variant="outline-dark"
+                  onClick={logOut}
+                >
+                  Log out
+                </Button>
+              </Nav>
+            ) : (
+              <Nav className="ml-auto">
+                <Button
+                  className="custom-button"
+                  variant="outline-dark"
+                  onClick={() => navigate(LOGIN_ROUTE)}
+                >
+                  Authorization
+                </Button>
+              </Nav>
+            )}
           </Offcanvas.Body>
         </Navbar.Offcanvas>
       </Container>
