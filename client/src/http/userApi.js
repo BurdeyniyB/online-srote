@@ -18,7 +18,18 @@ export const login = async (email, password) => {
 };
 
 export const check = async () => {
-  const { data } = await $authHost.get("api/user/auth");
-  localStorage.setItem("token", data.token);
-  return jwtDecode(data.token);
+  try {
+    const { data } = await $authHost.get("api/user/auth");
+    localStorage.setItem("token", data.token);
+    return jwtDecode(data.token);
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      console.log("Client doesn't auth");
+      localStorage.removeItem("token");
+    } else {
+      console.error("Unexpected error during auth check", error);
+    }
+    return null; 
+  }
 };
+

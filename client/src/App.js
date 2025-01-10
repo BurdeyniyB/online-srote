@@ -8,23 +8,28 @@ import { Spinner } from "react-bootstrap";
 import { check } from "./http/userApi";
 
 const App = observer(() => {
-  const {user} = useContext(Context);
+  const { user } = useContext(Context);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
       check()
         .then(data => {
-          console.log('check response:', data);
-          user.setUser(true);
-          user.setIsAuth(true);
-        }).finally(() => setLoading(false));
-    }, 500);
-  }, [user]); 
+          if (data) {
+            user.setUser(true);
+            user.setIsAuth(true);
+          }
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false); 
+    }
+  }, [user]);
   
 
-  if(loading){
-    return <Spinner animation="grow" />
+  if (loading) {
+    return <Spinner animation="grow" />;
   }
 
   return (
@@ -33,6 +38,6 @@ const App = observer(() => {
       <AppRouter />
     </BrowserRouter>
   );
-})
+});
 
 export default App;
