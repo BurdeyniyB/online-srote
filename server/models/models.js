@@ -19,7 +19,7 @@ const BasketDevice = sequelize.define("basket_device", {
 const Rating = sequelize.define("rating", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   rating: { type: DataTypes.INTEGER, allowNull: false },
-  comment: { type: DataTypes.STRING, allowNull: false },
+  comment: { type: DataTypes.STRING, allowNull: true },
 });
 
 const Device = sequelize.define("device", {
@@ -44,6 +44,16 @@ const DeviceInfo = sequelize.define("device_info", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   title: { type: DataTypes.STRING, allowNull: false },
   description: { type: DataTypes.STRING, allowNull: false },
+});
+
+const Order = sequelize.define("order", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  phone_number: { type: DataTypes.STRING, allowNull: false },
+  address: { type: DataTypes.STRING, allowNull: false },
+});
+
+const OrderDevice = sequelize.define("order_device", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
 // Зв’язки
@@ -71,6 +81,15 @@ Rating.belongsTo(Device); // Одна оцінка → один пристрій
 User.hasMany(Rating); // Один користувач → багато оцінок
 Rating.belongsTo(User); // Одна оцінка → один користувач
 
+Order.hasMany(OrderDevice);  
+OrderDevice.belongsTo(Order);
+
+Device.hasMany(OrderDevice);  
+OrderDevice.belongsTo(Device);
+
+User.hasMany(Order);  // Один користувач може мати багато замовлень
+Order.belongsTo(User);  // Одне замовлення належить одному користувачеві
+
 module.exports = {
   User,
   Basket,
@@ -80,4 +99,6 @@ module.exports = {
   DeviceInfo,
   Type,
   Brand,
+  Order,
+  OrderDevice
 };
