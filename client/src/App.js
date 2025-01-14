@@ -13,19 +13,22 @@ const App = observer(() => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      check()
-        .then(data => {
-          if (data) {
-            user.setUser(true);
-            user.setIsAuth(true);
-          }
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false); 
-    }
+    setTimeout(() => {
+      if (token) {
+        check()
+          .then(data => {
+            if (data) {
+              user.setUser(data);  
+              user.setIsAuth(true);
+            }
+          })
+          .finally(() => setLoading(false));
+      } else {
+        setLoading(false); 
+      }
+    }, 1000);
   }, [user]);
+  
   
 
   if (loading) {
