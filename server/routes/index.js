@@ -9,11 +9,11 @@ const ratingRouter = require("./ratingRouter");
 const orderRouter = require("./orderRoutes");
 
 router.use("/user", userRouter);
-router.use("/type", typeRouter);
-router.use("/brand", brandRouter);
+router.use("/device/type", typeRouter);
+router.use("/device/brand", brandRouter);
+router.use("/device/rating", ratingRouter);
 router.use("/device", deviceRouter);
 router.use("/basket", basketRouter);
-router.use("/rating", ratingRouter);
 router.use("/order", orderRouter);
 
 module.exports = router;

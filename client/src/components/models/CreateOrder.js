@@ -1,21 +1,14 @@
 import React, { useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
-import { createType } from "../../http/deviceAPI";
 
-const CreateType = ({ show, onHide }) => {
+const CreateOrder = ({ show, onHide }) => {
   const [value, setValue] = useState("");
-  const addType = () => {
-    createType({ name: value }).then((data) => {
-      setValue("");
-      onHide();
-    });
-  };
 
   return (
     <Modal show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Add new list
+          New order
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -31,7 +24,7 @@ const CreateType = ({ show, onHide }) => {
         <Button variant="outline-danger" onClick={onHide}>
           Close
         </Button>
-        <Button variant="outline-success" onClick={addType}>
+        <Button variant="outline-success" onClick={onHide}>
           Add
         </Button>
       </Modal.Footer>
@@ -39,4 +32,4 @@ const CreateType = ({ show, onHide }) => {
   );
 };
 
-export default CreateType;
+export default CreateOrder;

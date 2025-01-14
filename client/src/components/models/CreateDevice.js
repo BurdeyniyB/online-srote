@@ -10,8 +10,6 @@ const CreateDevice = observer(({ show, onHide }) => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [file, setFile] = useState(null);
-  const [type, setType] = useState(null);
-  const [brand, setBrand] = useState(null);
   const [info, setInfo] = useState([]);
 
   useEffect(() => {

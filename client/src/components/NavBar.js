@@ -7,11 +7,12 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
-import { ADMIN_ROUTE, LOGIN_ROUTE, STORE_ROUTE } from "../utils/const";
+import { ADMIN_ROUTE, BASKET_ROUTE, LOGIN_ROUTE, STORE_ROUTE } from "../utils/const";
 import "../style/App.css";
 import { Context } from "..";
 import { observer } from "mobx-react-lite";
 import { NavLink, useNavigate } from "react-router-dom";
+import { FaShoppingCart } from 'react-icons/fa';
 
 const NavBar = observer(() => {
   const { user } = useContext(Context);
@@ -21,6 +22,7 @@ const NavBar = observer(() => {
   const logOut = () => {
     user.setUser({});
     user.setIsAuth(false);
+    localStorage.removeItem("token");
   };
 
   return (
@@ -55,19 +57,28 @@ const NavBar = observer(() => {
             </Form>
             {user.isAuth ? (
               <Nav className="ml-auto" style={{ height: 40 }}>
-                <Button
-                  className="custom-button"
-                  variant="outline-dark"
-                  onClick={() => navigate(ADMIN_ROUTE)}
-                >
-                  Admin
-                </Button>
+                {user.user.role === "ADMIN" && (
+                  <Button
+                    className="custom-button"
+                    variant="outline-dark"
+                    onClick={() => navigate(ADMIN_ROUTE)}
+                  >
+                    Admin
+                  </Button>
+                )}
                 <Button
                   className="custom-button"
                   variant="outline-dark"
                   onClick={logOut}
                 >
                   Log out
+                </Button>
+                <Button
+                  className="custom-button"
+                  variant="outline-dark"
+                  onClick={() => navigate(BASKET_ROUTE)} 
+                >
+                  <FaShoppingCart />
                 </Button>
               </Nav>
             ) : (

@@ -25,7 +25,7 @@ const Store = observer(() => {
       device.setDevices(data.rows);
       device.setTotalCount(data.count);
     });
-  }, [device.page, device.selectedType, device.selectedBrand])
+  }, [device, device.page, device.selectedType, device.selectedBrand])
 
   return (
     <Container className="mt-2">
