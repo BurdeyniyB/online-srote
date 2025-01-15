@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Card, Image, Row } from "react-bootstrap";
+import { Button, Card, Image, Row } from "react-bootstrap";
 import { Context } from "..";
 import { fetchDevices } from "../http/deviceAPI";
+import { destroyDeviceFromBasket } from "../http/basketAPI";
 
 const BasketItem = ({ basketItem }) => {
-  const { device } = useContext(Context);
-  const [loading, setLoading] = useState(true); // Стан для відслідковування завантаження
+  const { user, device, basket } = useContext(Context);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadDevices = async () => {
@@ -13,10 +14,10 @@ const BasketItem = ({ basketItem }) => {
         const data = await fetchDevices(null, null, null, null);
         device.setDevices(data.rows);
         device.setTotalCount(data.count);
-        setLoading(false); // Дані завантажені, оновлюємо стан
+        setLoading(false);
       } catch (error) {
         console.error("Failed to fetch devices:", error);
-        setLoading(false); // Якщо сталася помилка, не зависає в стані завантаження
+        setLoading(false); 
       }
     };
     loadDevices();
@@ -24,15 +25,28 @@ const BasketItem = ({ basketItem }) => {
 
   const userDevice = device.devices.find((d) => d.id === basketItem.deviceId);
 
-  // Показуємо лоадер або порожній компонент, поки дані не завантажені
   if (loading) {
     return <div>Loading...</div>;
   }
 
   if (!userDevice) {
-    // Якщо девайс не знайдений
     return <Row className="mb-4">Device not found</Row>;
   }
+
+  const handleRemove = async() => {
+    try {
+      const basketData = {
+        userId: user.user.id,
+        deviceId: basketItem.deviceId
+      };
+      await destroyDeviceFromBasket(basketData);
+      basket.removeBasketDevice(basketItem.deviceId)
+      console.log("Product was removed");
+    } catch (error) {
+      console.log("Failed to remove device from basket:", error);
+    }
+  };
+  
 
   return (
     <Row className="mb-4">
@@ -49,6 +63,9 @@ const BasketItem = ({ basketItem }) => {
           <div><strong>Name:</strong> {userDevice.name}</div>
           <div><strong>Price:</strong> ${userDevice.price}</div>
         </div>
+        <Button variant="danger" onClick={handleRemove}>
+          Trash
+        </Button>
       </Card>
     </Row>
   );

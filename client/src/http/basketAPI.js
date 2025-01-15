@@ -1,16 +1,17 @@
-import { $authHost, $host } from "./index";
+import { $authHost } from "./index";
 
-export const createBasket = async (basket) => {
+export const addToBasket = async (basket) => {
   const { data } = await $authHost.post("api/basket", basket);
   return data;
 };
 
-export const fetchBasket = async () => {
-  const { data } = await $authHost.get("api/basket", basket);
+export const fetchBasket = async (userId) => {
+  const { data } = await $authHost.get("api/basket", { params: { userId } });
   return data;
 };
 
-export const destroyBasket = async () => {
-    const { data } = await $authHost.delete("api/basket", basket);
-    return data;
-}
+export const destroyDeviceFromBasket = async (basket) => {
+  const { data } = await $authHost.delete(`api/basket/${basket.userId}/${basket.deviceId}`);
+  return data;
+};
+
