@@ -33,7 +33,7 @@ class BasketController {
   async delete(req, res, next) {
     const { userId, deviceId } = req.params; 
     if (!userId || !deviceId) {
-      return next(ApiError.badRequest("Missing userId or deviceId"));
+      return next(ApiError.badRequest("Missing userId"));
     }
   
     const basket = await Basket.findOne({ where: { userId } });

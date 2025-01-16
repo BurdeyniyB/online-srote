@@ -6,6 +6,6 @@ const router = new Router();
 
 router.post('/', authMiddleware, orderController.create);
 router.get('/', authMiddleware, orderController.getAll);
-router.delete('/', checkRole("ADMIN"), orderController.delete);
+router.delete('/:orderId', checkRole("ADMIN"), orderController.delete);
 
 module.exports = router;
