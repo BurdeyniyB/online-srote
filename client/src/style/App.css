@@ -1,3 +1,17 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.store-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; 
+}
+
 .custom-button {
   margin-right: 5px;
   margin-left: 5px;
@@ -12,3 +26,59 @@
   background-color: rgb(226, 226, 226);
 }
 
+/* Загальний стиль для карток */
+.device-card {
+  width: 100%;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Плавне збільшення і тінь */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легка тінь */
+  padding: 10px;
+  text-align: center;
+}
+
+.device-card:hover {
+  transform: scale(1.05); /* Збільшення при наведенні */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Збільшення тіні при наведенні */
+}
+
+.device-name {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.device-price {
+  font-size: 1.1rem;
+  color: #007bff;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.currency {
+  font-size: 0.9rem;
+  margin-left: 5px;
+}
+
+/* Для розташування зображення по центру */
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+@media (max-width: 768px) {
+  .store-col {
+    margin-bottom: 20px;
+  }
+
+  .navbar-nav {
+    gap: 15px;
+  }
+
+  .search{
+    margin-bottom: 15px;
+  }
+}

@@ -28,7 +28,7 @@ const NavBar = observer(() => {
   return (
     <Navbar key={expand} expand={expand} style={{ backgroundColor: "#f7f7f7" }}>
       <Container fluid>
-        <NavLink style={{ color: "black" }} to={STORE_ROUTE}>
+        <NavLink style={{ color: "black", textDecoration: "none" }} to={STORE_ROUTE}>
           Online store
         </NavLink>
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
@@ -44,16 +44,18 @@ const NavBar = observer(() => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3" />
-            <Form className="d-flex justify-content-center">
-              <Form.Control
-                type="search"
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
-              />
-              <Button variant="outline-dark" className="custom-button">
-                Search
-              </Button>
+            <Form className="d-flex flex-column align-items-center search">
+              <div className="d-flex gap-2">
+                <Form.Control
+                  type="search"
+                  placeholder="Search"
+                  className="me-2"
+                  aria-label="Search"
+                />
+                <Button variant="outline-dark" className="custom-button">
+                  Search
+                </Button>
+              </div>
             </Form>
             {user.isAuth ? (
               <Nav className="ml-auto" style={{ height: 40 }}>

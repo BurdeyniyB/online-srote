@@ -2,6 +2,7 @@ import React from "react";
 import { Card, Col, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { DEVICE_ROUTE } from "../utils/const";
+import "../style/App.css";  // для додаткових стилів
 
 const DeviceItem = ({ device }) => {
   const navigate = useNavigate();
@@ -9,12 +10,23 @@ const DeviceItem = ({ device }) => {
   return (
     <Col
       md={3}
-      style={{ width: "auto" }}
+      className="mb-4"
       onClick={() => navigate(DEVICE_ROUTE + "/" + device.id)}
     >
-      <Card style={{ width: 150, cursor: "pointer" }} border="light" className="mb-5">
-        <Image width={150} height={180} src={process.env.REACT_APP_API_URL + device.img} />
-        <div>{device.name}</div>
+      <Card className="device-card" border="light">
+        <div className="image-container">
+          <Image
+            width={150}
+            height={180}
+            src={process.env.REACT_APP_API_URL + device.img}
+            alt={device.name}
+            className="device-image"
+          />
+        </div>
+        <div className="device-name">{device.name}</div>
+        <div className="device-price">
+          {device.price} <span className="currency">грн</span>
+        </div>
       </Card>
     </Col>
   );

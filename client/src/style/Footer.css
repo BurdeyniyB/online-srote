@@ -1,0 +1,48 @@
+.footer {
+    background-color: #f7f7f7;
+    padding: 20px 0;
+    margin-top: auto; /* Автоматичне відштовхування футера до низу */
+    border-top: 1px solid #ccc;
+    position: relative;
+    width: 100%;
+  }
+  
+  /* Стилі для футер колонок */
+  .footer-col {
+    margin-bottom: 20px;
+  }
+  
+  .footer-col h5 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .footer-col p {
+    font-size: 0.9rem;
+  }
+  
+  /* Соціальні іконки */
+  .social-icons {
+    font-size: 1.5rem;
+    display: flex;
+    gap: 15px;
+  }
+  
+  .social-icons svg {
+    cursor: pointer;
+    color: #333;
+  }
+  
+  .social-icons svg:hover {
+    color: #007bff;
+  }
+  
+  @media (max-width: 768px) {
+    .footer-col {
+      text-align: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+      }
+  }

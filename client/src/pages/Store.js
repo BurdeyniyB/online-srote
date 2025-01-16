@@ -7,6 +7,8 @@ import { observer } from "mobx-react-lite";
 import { Context } from "..";
 import { fetchBrands, fetchDevices, fetchTypes } from "../http/deviceAPI";
 import Pages from "../components/Pages";
+import Footer from "../components/Footer"; // Додаємо футер
+import '../style/App.css';
 
 const Store = observer(() => {
   const { device } = useContext(Context);
@@ -25,12 +27,12 @@ const Store = observer(() => {
       device.setDevices(data.rows);
       device.setTotalCount(data.count);
     });
-  }, [device, device.page, device.selectedType, device.selectedBrand])
+  }, [device, device.page, device.selectedType, device.selectedBrand]);
 
   return (
-    <Container className="mt-2">
+    <Container className="store-container">
       <Row>
-        <Col md={3}>
+        <Col md={3} className="store-col">
           <TypeBar />
         </Col>
         <Col md={9}>
@@ -39,6 +41,7 @@ const Store = observer(() => {
           <Pages />
         </Col>
       </Row>
+      <Footer />
     </Container>
   );
 });
