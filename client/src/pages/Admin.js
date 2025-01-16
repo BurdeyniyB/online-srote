@@ -12,7 +12,7 @@ const Admin = () => {
 
   return (
     <Container className="d-flex flex-column">
-      <Row className="mb-4">
+      <Row className="m-4">
         <Col>
           <Button variant="outline-dark" onClick={() => setBrandVisible(true)} className="w-100 mb-2">Add Brand</Button>
         </Col>

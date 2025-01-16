@@ -6,6 +6,7 @@ import "../style/App.css";
 
 const TypeBar = observer(() => {
   const { device } = useContext(Context);
+
   return (
     <div>
       <ListGroup>
