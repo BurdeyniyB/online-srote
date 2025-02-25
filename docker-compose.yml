@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # База даних
+  db:
+    image: postgres:latest
+    container_name: online_store_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: online_store
+    volumes:
+      - online_store_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # Сервер (Backend)
+  server:
+    build:
+      context: ./server
+    container_name: online_store_server
+    env_file:
+      - ./server/.env  # Ваш .env файл для сервера
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    networks:
+      - online_store_network
+
+  # Клієнт (Frontend)
+  client:
+    build:
+      context: ./client
+    container_name: online_store_client
+    environment:
+      REACT_APP_API_URL: http://server:8081
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+    networks:
+      - online_store_network
+    env_file:
+      - ./client/.env  # Ваш .env файл для клієнта
+
+# Мережа для з'єднання контейнерів
+networks:
+  online_store_network:
+    driver: bridge
+
+# Том для збереження даних бази
+volumes:
+  online_store_data:

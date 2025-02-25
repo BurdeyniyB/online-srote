@@ -1,0 +1,73 @@
+.custom-dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+    width: 100%;
+  }
+  
+  .custom-dropdown .dropdown-toggle {
+    width: 100%;
+    background-color: white !important;
+    color: black !important;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 0;
+    font-size: 16px;
+  }
+  
+  .custom-dropdown .dropdown-toggle::after {
+    content: "▼";
+    font-size: 12px;
+    margin-left: auto;
+    transition: transform 0.3s ease-in-out;
+    display: inline-block;
+  }
+  
+  .custom-dropdown.show .dropdown-toggle::after {
+    transform: rotate(180deg);
+  }
+  
+  /* Меню не перекриває інші елементи */
+  .custom-dropdown .dropdown-menu {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    background-color: white;
+    box-shadow: none;
+    padding: 0;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    position: static; /* Змінено з absolute */
+  }
+  
+  .custom-dropdown.show .dropdown-menu {
+    visibility: visible;
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  
+  .custom-dropdown .dropdown-item {
+    color: black;
+    padding: 10px 14px;
+    font-size: 16px;
+  }
+  
+  .custom-dropdown .dropdown-item:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .dropdown-menu {
+    all: unset !important;
+    display: block;
+ }
+ 

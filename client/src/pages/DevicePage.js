@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Container, Image, Row } from "react-bootstrap";
+import { Button, Container, Image } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { fetchOneDevice } from "../http/deviceAPI";
 import { addToBasket } from "../http/basketAPI";
 import { Context } from "..";
 import { observer } from "mobx-react-lite";
+import "../style/DevicePage.css"; // Імпорт стилів
 
 const DevicePage = observer(() => {
   const { user } = useContext(Context);
@@ -29,39 +30,34 @@ const DevicePage = observer(() => {
   };
 
   return (
-    <Container>
-      <div className="device-details">
+    <Container className="device-page">
+      <div className="device-container">
         <Image
           width={300}
+          className="device-image"
           src={`${process.env.REACT_APP_API_URL}${device.img}`}
           alt={device.name}
         />
-        <h2>{device.name}</h2>
-        <div>
+        <div className="device-info">
+          <h2>{device.name}</h2>
           <p>{device.description}</p>
-          <p>{device.price} $</p>
-          <Button
-            className="mb-2"
-            variant="outline-dark"
-            onClick={addDeviceToBasket}
-          >
+          <p><strong>Price:</strong> {device.price} $</p>
+          <Button variant="outline-dark" className="add-to-basket" onClick={addDeviceToBasket}>
             Add to basket
           </Button>
+
+          {/* Characteristics section */}
+          <div className="device-characteristics">
+            <h1>Characteristics</h1>
+            <div className="characteristics-grid">
+              {device.info.map((info) => (
+                <div key={info.id} className="characteristics-item">
+                  <strong>{info.title}:</strong> {info.description}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="device-characteristics">
-        <h1>Characteristics</h1>
-        {device.info.map((info, index) => (
-          <Row
-            key={info.id}
-            style={{
-              background: index % 2 === 0 ? "lightgray" : "transparent",
-              padding: 10,
-            }}
-          >
-            <strong>{info.title}:</strong> {info.description}
-          </Row>
-        ))}
       </div>
     </Container>
   );

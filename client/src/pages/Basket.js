@@ -22,9 +22,9 @@ const Basket = observer(() => {
       ) : (
         <p>Your basket is empty.</p>
       )}
-      <div className="text-end mt-4">
+      <div className="text-end">
         <Button
-          className="text-end mt-4"
+          className="text-end mb-4"
           variant="success"
           size="lg"
           onClick={() => setOrderVisible(true)}

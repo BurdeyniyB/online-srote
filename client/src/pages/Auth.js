@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { Button, Container, Form, Row } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { LOGIN_ROUTE, REGISTRATION_ROUTE, STORE_ROUTE } from "../utils/const";
+import { LOGIN_ROUTE, REGISTER_ROUTE, STORE_ROUTE } from "../utils/const";
 import { login, registration } from "../http/userApi";
 import { observer } from "mobx-react-lite";
 import { Context } from "..";
@@ -38,7 +38,15 @@ const Auth = observer(() => {
     >
       <Card style={{ width: 600 }} className="p-5">
         <h2 className="m-auto">{isLogin ? "Authorization" : "Registrarion"}</h2>
-        <Form className="d-flex flex-column">
+        <Form
+          className="d-flex flex-column"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault(); // Запобігаємо перезавантаженню сторінки
+              click();
+            }
+          }}
+        >
           <Form.Control
             className="mt-3"
             type="email"
@@ -57,7 +65,7 @@ const Auth = observer(() => {
             {isLogin ? (
               <div>
                 Don't have an account?{" "}
-                <NavLink to={REGISTRATION_ROUTE}>Go to registration</NavLink>
+                <NavLink to={REGISTER_ROUTE}>Go to registration</NavLink>
               </div>
             ) : (
               <div>
@@ -65,8 +73,12 @@ const Auth = observer(() => {
                 <NavLink to={LOGIN_ROUTE}>Log in</NavLink>
               </div>
             )}
-            <Button variant={"outline-success"} onClick={click}>
-              {isLogin ? "Login" : "Regisration"}
+            <Button
+              className="mt-3"
+              variant={"outline-success"}
+              onClick={click}
+            >
+              {isLogin ? "Login" : "Registration"}
             </Button>
           </Row>
         </Form>

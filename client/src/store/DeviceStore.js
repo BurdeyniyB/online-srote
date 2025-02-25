@@ -6,11 +6,11 @@ export default class DeviceStore {
     this._brands = [];
     this._devices = [];
     this._selectedType = {};
-    this._selectedBrand = {};
+    this._selectedBrand = {};    
     this._search = '';
     this._page = 1;
     this._totalCount = 0;
-    this._limit = 2;
+    this._limit = 8;
     makeAutoObservable(this);
   }
 
@@ -27,11 +27,11 @@ export default class DeviceStore {
   }
 
   setSelectedType(type) {
-    this._selectedType = this._selectedType.id === type.id ? {} : type;
+    this._selectedType = type;
   }  
-
+  
   setSelectedBrand(brand) {
-    this._selectedBrand = this._selectedBrand.id === brand.id ? {} : brand;
+    this._selectedBrand = brand;
   }  
 
   setSearch(search){

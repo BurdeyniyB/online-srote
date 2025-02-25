@@ -1,11 +1,30 @@
-import React from "react";
-import { Card, Col, Image } from "react-bootstrap";
+import React, { useContext } from "react";
+import { Button, Card, Col, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { DEVICE_ROUTE } from "../utils/const";
-import "../style/App.css";  // для додаткових стилів
+import "../style/App.css";
+import { observer } from "mobx-react-lite";
+import { Context } from "..";
+import { addToBasket } from "../http/basketAPI";
+import { FaShoppingCart } from "react-icons/fa"; // Іконка кошика
 
-const DeviceItem = ({ device }) => {
+const DeviceItem = observer(({ device }) => {
   const navigate = useNavigate();
+  const { user } = useContext(Context);
+  
+  const addDeviceToBasket = async (e) => {
+    e.stopPropagation(); // Щоб не переходило на сторінку товару при натисканні на кнопку
+    try {
+      const basketData = {
+        userId: user.user.id,
+        deviceId: device.id,
+      };
+      await addToBasket(basketData);
+      console.log("Product was added");
+    } catch (error) {
+      console.error("Failed to add product to basket:", error);
+    }
+  };
 
   return (
     <Col
@@ -16,20 +35,23 @@ const DeviceItem = ({ device }) => {
       <Card className="device-card" border="light">
         <div className="image-container">
           <Image
-            width={150}
-            height={180}
             src={process.env.REACT_APP_API_URL + device.img}
             alt={device.name}
-            className="device-image"
+            className="device-image-main"
           />
         </div>
         <div className="device-name">{device.name}</div>
-        <div className="device-price">
-          {device.price} <span className="currency">грн</span>
-        </div>
+        <div className="device-price">{device.price} грн</div>
+        <Button
+          onClick={addDeviceToBasket}
+          className="basket-button"
+          variant="gray"
+        >
+          <FaShoppingCart />
+        </Button>
       </Card>
     </Col>
   );
-};
+});
 
 export default DeviceItem;

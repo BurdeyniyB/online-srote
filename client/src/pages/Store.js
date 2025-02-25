@@ -1,14 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import TypeBar from "../components/TypeBar";
-import BrandBar from "../components/BrandBar";
+import DropBar from "../components/DropBar";
 import DeviceList from "../components/DeviceList";
 import { observer } from "mobx-react-lite";
 import { Context } from "..";
 import { fetchBrands, fetchDevices, fetchTypes } from "../http/deviceAPI";
 import Pages from "../components/Pages";
-import Footer from "../components/Footer"; // Додаємо футер
-import '../style/App.css';
+import "../style/App.css";
 
 const Store = observer(() => {
   const { device } = useContext(Context);
@@ -20,28 +18,44 @@ const Store = observer(() => {
       device.setDevices(data.rows);
       device.setTotalCount(data.count);
     });
-  }, [device]);
+  }, []);
 
   useEffect(() => {
-    fetchDevices(device.selectedType.id, device.selectedBrand.id, device.page, 2, device.search).then((data) => {
+    console.log('useEffect' + '\nselected type: ' + device.selectedType.id + '\nselected brand: ' + device.selectedBrand.id);
+    fetchDevices(
+      device.selectedType?.id,
+      device.selectedBrand?.id,
+      device.page,
+      device.limit,
+      device.search
+    ).then((data) => {
       device.setDevices(data.rows);
       device.setTotalCount(data.count);
     });
-  }, [device, device.page, device.selectedType, device.selectedBrand, device.search]);
+  }, [device.selectedType, device.selectedBrand, device.page, device.search]);
 
   return (
     <Container className="store-container">
       <Row>
         <Col md={3} className="store-col">
-          <TypeBar />
+          <DropBar
+            name="Type"
+            items={device.types}
+            selectedItem={device.selectedType}
+            setSelectedItem={(item) => device.setSelectedType(item)}
+          />
+          <DropBar
+            name="Brand"
+            items={device.brands}
+            selectedItem={device.selectedBrand}
+            setSelectedItem={(item) => device.setSelectedBrand(item)}
+          />
         </Col>
         <Col md={9}>
-          <BrandBar />
           <DeviceList />
           <Pages />
         </Col>
       </Row>
-      <Footer />
     </Container>
   );
 });

@@ -9,7 +9,6 @@ html, body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; 
 }
 
 .custom-button {
@@ -26,6 +25,11 @@ html, body {
   background-color: rgb(226, 226, 226);
 }
 
+.device-list-container {
+  min-width: 300px;  /* Мінімальна ширина */
+  min-height: 650px; /* Мінімальна висота */
+}
+
 /* Загальний стиль для карток */
 .device-card {
   width: 100%;
@@ -34,6 +38,8 @@ html, body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легка тінь */
   padding: 10px;
   text-align: center;
+  min-height: 300px;
+  min-width: 210px;
 }
 
 .device-card:hover {
@@ -45,20 +51,50 @@ html, body {
   font-size: 1rem;
   font-weight: bold;
   margin-top: 10px;
+  min-height: 50px;
 }
 
 .device-price {
   font-size: 1.1rem;
-  color: #007bff;
-  margin-top: 10px;
+  font-weight: bold;
+  color: black;
+  margin: 10px 0px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.basket-button {
+  background-color: #000000;
+  border-color: #000000;
+  transition: all 0.3s ease;
+}
+
+.basket-button:hover {
+  background-color: #c9c9c9;
+  border-color: #c9c9c9;
+}
+
+.basket-button svg {
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.basket-button:hover svg {
+  color: black;
+}
+
+
 .currency {
   font-size: 0.9rem;
   margin-left: 5px;
+}
+
+.device-image-main {
+  border-radius: 10px;
+  max-width: 100%;
+  height: 150px;
+  width: auto;
 }
 
 /* Для розташування зображення по центру */

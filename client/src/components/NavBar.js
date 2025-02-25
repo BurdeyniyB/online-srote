@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Navbar,
   Container,
@@ -17,11 +17,19 @@ import "../style/App.css";
 import { Context } from "..";
 import { observer } from "mobx-react-lite";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaShoppingCart } from "react-icons/fa";
+import {
+  FaSignOutAlt,
+  FaUserShield,
+  FaShoppingCart,
+  FaSignInAlt,
+} from "react-icons/fa";
+import "../style/NavBar.css";
 
 const NavBar = observer(() => {
   const { user, device } = useContext(Context);
   const [searchQuery, setSearchQuery] = useState("");
+  const [timer, setTimer] = useState(null);
+
   const navigate = useNavigate();
   const expand = "xxl";
 
@@ -31,18 +39,23 @@ const NavBar = observer(() => {
     localStorage.removeItem("token");
   };
 
-  const handleSearchSubmit = () => {
-    device.setSearch(searchQuery);
-  };
+  useEffect(() => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+
+    const newTimer = window.setTimeout(() => {
+      device.setSearch(searchQuery);
+    }, 500);
+
+    setTimer(newTimer);
+  }, [searchQuery]);
 
   return (
     <Navbar key={expand} expand={expand} style={{ backgroundColor: "#f7f7f7" }}>
       <Container fluid>
-        <NavLink
-          style={{ color: "black", textDecoration: "none" }}
-          to={STORE_ROUTE}
-        >
-          Online store
+        <NavLink style={{ textDecoration: "none" }} to={STORE_ROUTE}>
+          <div className="mainLink">Online store</div>
         </NavLink>
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
         <Navbar.Offcanvas
@@ -67,50 +80,53 @@ const NavBar = observer(() => {
                   value={searchQuery} // Підключаємо локальний стан
                   onChange={(e) => setSearchQuery(e.target.value)} // Обробник для зміни пошукового запиту
                 />
-                <Button
+                {/* <Button
                   variant="outline-dark"
                   className="custom-button"
                   onClick={handleSearchSubmit}
                 >
                   Search
-                </Button>
+                </Button> */}
               </div>
             </Form>
+            <Button
+              title="Basket"
+              className="custom-button"
+              variant="none"
+              onClick={() => navigate(BASKET_ROUTE)}
+            >
+              <FaShoppingCart size={20} />
+            </Button>
             {user.isAuth ? (
               <Nav className="ml-auto" style={{ height: 40 }}>
                 <Button
+                  title="Log out"
                   className="custom-button"
-                  variant="outline-dark"
+                  variant="none"
                   onClick={logOut}
                 >
-                  Log out
+                  <FaSignOutAlt size={20} />
                 </Button>
-                {user.user.role === "ADMIN" ? (
+                {user.user.role === "ADMIN" && (
                   <Button
+                    title="Admin"
                     className="custom-button"
-                    variant="outline-dark"
+                    variant="none"
                     onClick={() => navigate(ADMIN_ROUTE)}
                   >
-                    Admin
-                  </Button>
-                ) : (
-                  <Button
-                    className="custom-button"
-                    variant="outline-dark"
-                    onClick={() => navigate(BASKET_ROUTE)}
-                  >
-                    <FaShoppingCart />
+                    <FaUserShield size={20} />
                   </Button>
                 )}
               </Nav>
             ) : (
               <Nav className="ml-auto">
                 <Button
+                  title="Sing in"
                   className="custom-button"
-                  variant="outline-dark"
+                  variant="none"
                   onClick={() => navigate(LOGIN_ROUTE)}
                 >
-                  Authorization
+                  <FaSignInAlt size={20} />
                 </Button>
               </Nav>
             )}
