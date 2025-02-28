@@ -29,7 +29,7 @@ const DeviceItem = observer(({ device }) => {
   return (
     <Col
       md={3}
-      className="mb-4"
+      className="mb-4 col-position"
       onClick={() => navigate(DEVICE_ROUTE + "/" + device.id)}
     >
       <Card className="device-card" border="light">

@@ -5,9 +5,18 @@ export default class DeviceStore {
     this._types = [];
     this._brands = [];
     this._devices = [];
-    this._selectedType = {};
-    this._selectedBrand = {};    
-    this._search = '';
+    this._sortBy = [
+      { id: "price_asc", name: "Price: Low to High" },
+      { id: "price_desc", name: "Price: High to Low" },
+      { id: "date_asc", name: "Date: Oldest First" },
+      { id: "date_desc", name: "Date: Newest First" },
+    ];
+    this._minPrice = {};
+    this._maxPrice = {};
+    this._selectedType = [];
+    this._selectedBrand = [];
+    this._selectedSortBy = {};
+    this._search = "";
     this._page = 1;
     this._totalCount = 0;
     this._limit = 8;
@@ -27,14 +36,41 @@ export default class DeviceStore {
   }
 
   setSelectedType(type) {
-    this._selectedType = type;
-  }  
-  
-  setSelectedBrand(brand) {
-    this._selectedBrand = brand;
-  }  
+    if (this._selectedType.some((t) => t.id === type.id)) {
+      this._selectedType = this._selectedType.filter((t) => t.id !== type.id);
+    } else {
+      this._selectedType = [...this._selectedType, type];
+    }
+    console.log("selected type:" + this._selectedType);
+  }
 
-  setSearch(search){
+  setSelectedBrand(brand) {
+    if (this._selectedBrand.some((b) => b.id === brand.id)) {
+      this._selectedBrand = this._selectedBrand.filter((b) => b.id !== brand.id);
+    } else {
+      this._selectedBrand = [...this._selectedBrand, brand];
+    }
+    console.log("selected brand:" + this._selectedBrand);
+  }
+
+  setSelectedSortBy(sortBy) {
+    if (this._selectedSortBy.id !== sortBy.id) {
+      this._selectedSortBy = sortBy;
+    } else {
+      this._selectedSortBy = {};
+    }
+    console.log("selected sort:" + this._selectedSortBy);
+  }
+
+  setMinPrice(minPrice){
+    this._minPrice = minPrice;
+  }
+
+  setMaxPrice(maxPrice){
+    this._maxPrice = maxPrice;
+  }
+
+  setSearch(search) {
     this._search = search;
   }
 
@@ -62,6 +98,10 @@ export default class DeviceStore {
     return this._devices;
   }
 
+  get sortBy() {
+    return this._sortBy;
+  }
+
   get selectedType() {
     return this._selectedType;
   }
@@ -70,7 +110,19 @@ export default class DeviceStore {
     return this._selectedBrand;
   }
 
-  get search(){
+  get selectedSortBy() {
+    return this._selectedSortBy;
+  }
+
+  get minPrice(){
+    return this._minPrice;
+  }
+
+  get maxPrice() {
+    return this._maxPrice;
+  }
+
+  get search() {
     return this._search;
   }
 

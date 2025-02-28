@@ -25,12 +25,14 @@ export const createDevice = async (device) => {
   return data;
 };
 
-export const fetchDevices = async (typeId, brandId, page, limit = 5, search) => {
-  const { data } = await $host.get("api/device", {params:{
-    typeId, brandId, page, limit, search
-  }});
+export const fetchDevices = async (typeId, brandId, minPrice, maxPrice, sortBy, page, limit = 5, search) => {
+  console.log('sort by' + sortBy);
+  const { data } = await $host.get("api/device", {
+    params: { typeId, brandId, minPrice, maxPrice, sortBy, page, limit, search },
+  });
   return data;
 };
+
 
 export const fetchOneDevice = async (id) => {
   const { data } = await $host.get("api/device/" + id);

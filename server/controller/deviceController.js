@@ -39,50 +39,85 @@ class DeviceController {
   }
 
   async getAll(req, res) {
-    let { brandId, typeId, limit, page, search } = req.query;
-    page = page || 1;
-    limit = limit || 9;
-    let offset = page * limit - limit;
-    let devices;
-    const searchCondition = search
-      ? {
-          [Op.or]: [
-            { name: { [Op.iLike]: `%${search}%` } },
-            { description: { [Op.iLike]: `%${search}%` } },  
-          ],
-        }
-      : {};
+    try {
+      let { brandId, typeId, minPrice, maxPrice, sortBy, limit, page, search } =
+        req.query;
+      page = parseInt(page) || 1;
+      limit = parseInt(limit) || 9;
+      let offset = (page - 1) * limit;
+      let devices;
 
-    if (!brandId && !typeId) {
-      devices = await Device.findAndCountAll({
-        where: searchCondition,
-        limit,
-        offset,
-      });
-    }
-    if (brandId && !typeId) {
-      devices = await Device.findAndCountAll({
-        where: { brandId, ...searchCondition },
-        limit,
-        offset,
-      });
-    }
-    if (!brandId && typeId) {
-      devices = await Device.findAndCountAll({
-        where: { typeId, ...searchCondition },
-        limit,
-        offset,
-      });
-    }
-    if (brandId && typeId) {
-      devices = await Device.findAndCountAll({
-        where: { brandId, typeId, ...searchCondition },
-        limit,
-        offset,
-      });
-    }
+      // Перетворення brandId та typeId у масиви чисел, якщо вони передані
+      brandId = brandId
+        ? brandId
+            .toString()
+            .split(",")
+            .map((id) => parseInt(id))
+            .filter((id) => !isNaN(id))
+        : [];
 
-    return res.json(devices);
+      typeId = typeId
+        ? typeId
+            .toString()
+            .split(",")
+            .map((id) => parseInt(id))
+            .filter((id) => !isNaN(id))
+        : [];
+
+      const searchCondition = search
+        ? {
+            [Op.or]: [
+              { name: { [Op.iLike]: `%${search}%` } },
+              { description: { [Op.iLike]: `%${search}%` } },
+            ],
+          }
+        : {};
+
+      const priceCondition =
+        minPrice && maxPrice
+          ? { price: { [Op.between]: [minPrice, maxPrice] } }
+          : minPrice
+          ? { price: { [Op.gte]: minPrice } }
+          : maxPrice
+          ? { price: { [Op.lte]: maxPrice } }
+          : {};
+
+      const whereCondition = {
+        ...searchCondition,
+        ...priceCondition,
+        ...(brandId && brandId.length ? { brandId: { [Op.in]: brandId } } : {}),
+        ...(typeId && typeId.length ? { typeId: { [Op.in]: typeId } } : {}),
+      };
+
+      let order = [];
+      switch(sortBy){
+        case "price_asc":
+         order.push(["price", "ASC"])
+        break;
+        case "price_desc":
+         order.push(["price", "DESC"])
+        break;
+        case "date_asc":
+          order.push(["createdAt", "ASC"])
+          break;
+        case "date_desc":
+          order.push(["createdAt", "DESC"])
+          break;
+        default:
+          order.push(["createdAt", "DESC"])
+      }
+
+      devices = await Device.findAndCountAll({
+        where: whereCondition,
+        limit,
+        offset,
+        order,
+      });
+
+      return res.json(devices);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
   }
 
   async getOne(req, res) {

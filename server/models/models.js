@@ -1,5 +1,5 @@
 const sequelize = require("../db");
-const { DataTypes, DATE } = require("sequelize");
+const { DataTypes } = require("sequelize");
 
 const User = sequelize.define("user", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -14,6 +14,7 @@ const Basket = sequelize.define("basket", {
 
 const BasketDevice = sequelize.define("basket_device", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  quantity: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 }, // Додаємо кількість товару
 });
 
 const Rating = sequelize.define("rating", {
@@ -28,6 +29,9 @@ const Device = sequelize.define("device", {
   description: { type: DataTypes.STRING },
   price: { type: DataTypes.INTEGER, allowNull: false },
   img: { type: DataTypes.STRING, allowNull: false },
+  inStock: { type: DataTypes.BOOLEAN, defaultValue: true }, // Наявність товару
+  sale: { type: DataTypes.INTEGER, allowNull: true }, // Відсоток знижки
+  isHidden: { type: DataTypes.BOOLEAN, defaultValue: false }, // Чи прихований товар
 });
 
 const Type = sequelize.define("type", {
@@ -49,14 +53,22 @@ const DeviceInfo = sequelize.define("device_info", {
 const Order = sequelize.define("order", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   phone_number: { type: DataTypes.STRING, allowNull: false },
-  address: { type: DataTypes.STRING, allowNull: false },
+  email: { type: DataTypes.STRING, allowNull: false },
+  country: { type: DataTypes.STRING, allowNull: false },
+  state_province: { type: DataTypes.STRING, allowNull: false },
+  zip_postal_code: { type: DataTypes.STRING, allowNull: false },
+  payment: { type: DataTypes.STRING, allowNull: false },
+  isConfirm: { type: DataTypes.BOOLEAN, defaultValue: false },
+  inRoad: { type: DataTypes.BOOLEAN, defaultValue: false },
+  asComplete: { type: DataTypes.BOOLEAN, defaultValue: false },
 });
 
 const OrderDevice = sequelize.define("order_device", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  quantity: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 }, 
 });
 
-// Зв’язки
+// 🔗 **Зв’язки**
 User.hasOne(Basket);
 Basket.belongsTo(User);
 
@@ -69,26 +81,26 @@ Device.hasMany(BasketDevice);
 Device.hasMany(DeviceInfo, { as: "info" });
 DeviceInfo.belongsTo(Device);
 
-Brand.hasMany(Device); // Один бренд → багато пристроїв
-Device.belongsTo(Brand); // Один пристрій → один бренд
+Brand.hasMany(Device);
+Device.belongsTo(Brand);
 
-Type.hasMany(Device); // Один тип → багато пристроїв
-Device.belongsTo(Type); // Один пристрій → один тип
+Type.hasMany(Device);
+Device.belongsTo(Type);
 
-Device.hasMany(Rating); // Один пристрій → багато оцінок
-Rating.belongsTo(Device); // Одна оцінка → один пристрій
+Device.hasMany(Rating);
+Rating.belongsTo(Device);
 
-User.hasMany(Rating); // Один користувач → багато оцінок
-Rating.belongsTo(User); // Одна оцінка → один користувач
+User.hasMany(Rating);
+Rating.belongsTo(User);
 
-Order.hasMany(OrderDevice);  
+Order.hasMany(OrderDevice);
 OrderDevice.belongsTo(Order);
 
-Device.hasMany(OrderDevice);  
+Device.hasMany(OrderDevice);
 OrderDevice.belongsTo(Device);
 
-User.hasMany(Order);  // Один користувач може мати багато замовлень
-Order.belongsTo(User);  // Одне замовлення належить одному користувачеві
+User.hasMany(Order);
+Order.belongsTo(User);
 
 module.exports = {
   User,
@@ -100,5 +112,5 @@ module.exports = {
   Type,
   Brand,
   Order,
-  OrderDevice
+  OrderDevice,
 };

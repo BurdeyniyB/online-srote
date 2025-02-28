@@ -1,0 +1,82 @@
+.price-filter-container {
+    width: 100%;
+  }
+  
+  .slider-container {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    margin-bottom: 10px;
+  }
+  
+  /* Чорна тонка лінія по всій довжині слайдера */
+  .slider-track {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+  
+  /* Активна частина між повзунками */
+  .slider-range {
+    position: absolute;
+    height: 2px;
+    background-color: #333;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+  
+  .slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 20px;
+    background: none;
+    position: absolute;
+    top: 0;
+    pointer-events: none;
+    z-index: 3;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #555;
+    border: 2px solid white;
+    cursor: pointer;
+    pointer-events: all;
+    position: relative;
+    z-index: 4;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #555;
+    border: 2px solid white;
+    cursor: pointer;
+    pointer-events: all;
+    position: relative;
+    z-index: 4;
+  }
+  
+  .input-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .price-input {
+    width: 48%;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  

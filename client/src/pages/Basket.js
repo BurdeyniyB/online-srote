@@ -10,7 +10,9 @@ const Basket = observer(() => {
   const { basket, user } = useContext(Context);
   const [orderVisible, setOrderVisible] = useState(false);
   useEffect(() => {
-    fetchBasket(user.user.id).then((data) => basket.setBasketDevice(data));
+    if(user.user.id){
+      fetchBasket(user.user.id).then((data) => basket.setBasketDevice(data));
+    }
   }, [basket, user]);
 
   return (

@@ -6,8 +6,10 @@ export default class BasketStore {
     makeAutoObservable(this);
   }
 
-  setBasketDevice(basketDevices) {
-    this._basketDevices = basketDevices;
+  setBasketDevice(basketDevice) {
+    if(this._basketDevices.some((d) => d.id !== basketDevice.id)){
+      this._basketDevices = [...this._basketDevices, basketDevice];
+    }
   }
 
   removeBasketDevice(deviceId) {

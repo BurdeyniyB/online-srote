@@ -26,8 +26,8 @@ html, body {
 }
 
 .device-list-container {
-  min-width: 300px;  /* Мінімальна ширина */
-  min-height: 650px; /* Мінімальна висота */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 /* Загальний стиль для карток */
@@ -40,6 +40,7 @@ html, body {
   text-align: center;
   min-height: 300px;
   min-width: 210px;
+  max-width: 300px;
 }
 
 .device-card:hover {
@@ -117,4 +118,46 @@ html, body {
   .search{
     margin-bottom: 15px;
   }
+}
+
+
+@media (max-width: 485px) {
+  .col-position{
+    display: flex;
+    justify-content: center;
+  }
+
+  .device-list-container {
+    grid-template-columns: repeat(1, 1fr); /* 2 колонки для маленьких екранів */
+  }
+}
+
+@media (min-width: 485px) and (max-width: 780px) {
+  .device-list-container {
+    grid-template-columns: repeat(2, 1fr); /* 3 колонки для середніх екранів */
+  }
+}
+
+@media (min-width: 780px) and (max-width: 1400px) {
+  .device-list-container {
+    grid-template-columns: repeat(3, 1fr); /* 4 колонки для ширших екранів */
+  }
+}
+
+@media (min-width: 1400px) {
+  .device-list-container {
+    grid-template-columns: repeat(4, 1fr); /* 5 колонок для великих екранів */
+  }
+}
+
+@media (max-width: 1000px) {
+  .store-col {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .device-col{
+    width: 10%;
+  }
+
 }
