@@ -43,7 +43,7 @@ class DeviceController {
       let { brandId, typeId, minPrice, maxPrice, sortBy, limit, page, search } =
         req.query;
       page = parseInt(page) || 1;
-      limit = parseInt(limit) || 9;
+      limit = parseInt(limit) || 20;
       let offset = (page - 1) * limit;
       let devices;
 

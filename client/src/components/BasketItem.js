@@ -1,73 +1,81 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Card, Image, Row } from "react-bootstrap";
+import { Card, Image, Button } from "react-bootstrap";
 import { Context } from "..";
-import { fetchDevices } from "../http/deviceAPI";
 import { destroyDeviceFromBasket } from "../http/basketAPI";
+import { FaTimes, FaMinus, FaPlus } from "react-icons/fa"; 
+import "../style/BasketItem.css";
+import { fetchDevices } from "../http/deviceAPI";
 
 const BasketItem = ({ basketItem }) => {
   const { user, device, basket } = useContext(Context);
-  const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(basketItem.quantity);
+  const [userDevice, setUserDevice] = useState();
 
   useEffect(() => {
-    const loadDevices = async () => {
-      try {
-        const data = await fetchDevices(null, null, null, null);
-        device.setDevices(data.rows);
-        device.setTotalCount(data.count);
-        setLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch devices:", error);
-        setLoading(false); 
-      }
-    };
-    loadDevices();
-  }, [device]);
+    fetchDevices(null, null, null, null, "date_desc", 1, device.limit, null).then((data) => {
+      device.setDevices(data.rows);
+      device.setTotalCount(data.count);
+      setUserDevice(device.devices.find((d) => d.id === basketItem.deviceId));
+    });
+  }, []);
 
-  const userDevice = device.devices.find((d) => d.id === basketItem.deviceId);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  console.log("Device: " + JSON.stringify(device.devices));
 
   if (!userDevice) {
-    return <Row className="mb-4">Device not found</Row>;
+    return <div className="basket-item">Device not found</div>;
   }
 
-  const handleRemove = async() => {
+  const handleRemove = async () => {
     try {
-      const basketData = {
+      basket.removeBasketDevice(basketItem.deviceId);
+      await destroyDeviceFromBasket({
         userId: user.user.id,
-        deviceId: basketItem.deviceId
-      };
-      await destroyDeviceFromBasket(basketData);
-      basket.removeBasketDevice(basketItem.deviceId)
+        deviceId: basketItem.deviceId,
+      });
       console.log("Product was removed");
     } catch (error) {
       console.log("Failed to remove device from basket:", error);
     }
   };
-  
+
+  const handleQuantityChange = (newQuantity) => {
+    if (newQuantity < 1) return;
+    setQuantity(newQuantity);
+    basket.setQuantity({ deviceId: basketItem.deviceId, quantity: newQuantity });
+  };
 
   return (
-    <Row className="mb-4">
-      <Card className="p-3 d-flex flex-row align-items-center">
+    <Card className="basket-card">
+      <div className="basket-content">
         <Image
           src={process.env.REACT_APP_API_URL + userDevice.img}
           rounded
-          width={100}
-          height={100}
+          height={60}
+          width={60}
           alt={userDevice.name}
-          className="me-3"
+          className="basket-image"
         />
-        <div className="me-auto">
-          <div><strong>Name:</strong> {userDevice.name}</div>
-          <div><strong>Price:</strong> ${userDevice.price}</div>
+        <div className="basket-name">{userDevice.name}</div>
+        <div className="quantity-control">
+          <Button variant="light" className="quantity-btn" onClick={() => handleQuantityChange(basketItem.quantity - 1)}>
+            <FaMinus />
+          </Button>
+          <input
+            type="number"
+            value={quantity}
+            onChange={(e) => handleQuantityChange(parseInt(e.target.value) || 1)}
+            min="1"
+          />
+          <Button variant="light" className="quantity-btn" onClick={() => handleQuantityChange(basketItem.quantity + 1)}>
+            <FaPlus />
+          </Button>
         </div>
-        <Button variant="danger" onClick={handleRemove}>
-          Trash
+        <div className="basket-price">${userDevice.price}</div>
+        <Button variant="light" onClick={handleRemove} className="basket-remove-btn">
+          <FaTimes />
         </Button>
-      </Card>
-    </Row>
+      </div>
+    </Card>
   );
 };
 

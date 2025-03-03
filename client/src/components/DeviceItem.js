@@ -10,7 +10,7 @@ import { FaShoppingCart } from "react-icons/fa"; // Іконка кошика
 
 const DeviceItem = observer(({ device }) => {
   const navigate = useNavigate();
-  const { user } = useContext(Context);
+  const { user, basket } = useContext(Context);
   
   const addDeviceToBasket = async (e) => {
     e.stopPropagation(); // Щоб не переходило на сторінку товару при натисканні на кнопку
@@ -18,12 +18,15 @@ const DeviceItem = observer(({ device }) => {
       const basketData = {
         userId: user.user.id,
         deviceId: device.id,
+        quantity: 1,
       };
+      basket.setBasketDevice(basketData);
       await addToBasket(basketData);
       console.log("Product was added");
+      return;
     } catch (error) {
-      console.error("Failed to add product to basket:", error);
-    }
+      console.log("Failed to add product to basket:", error);
+    } 
   };
 
   return (

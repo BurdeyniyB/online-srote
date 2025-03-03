@@ -17,6 +17,36 @@ class BasketController {
     return res.json(order);
   }
 
+  async setQuantity(req, res, next) {
+    const { userId, deviceId, quantity } = req.body;
+    
+    if (!userId || !deviceId) {
+      return next(ApiError.badRequest("Missing userId or deviceId"));
+    }
+  
+    if (!quantity || isNaN(quantity) || quantity < 1) {
+      return next(ApiError.badRequest("Invalid quantity value"));
+    }
+  
+    const basket = await Basket.findOne({ where: { userId } });
+    if (!basket) {
+      return next(ApiError.internal("Basket not found"));
+    }
+  
+    let basketDevice = await BasketDevice.findOne({
+      where: { basketId: basket.id, deviceId },
+    });
+  
+    if (!basketDevice) {
+      return next(ApiError.badRequest("Device not found in basket"));
+    }
+
+    basketDevice.quantity = Number(quantity);
+    await basketDevice.save();
+  
+    return res.json({ message: "Quantity updated", basketDevice });
+  }
+
   async getAll(req, res, next) {
     const { userId } = req.query;
     const basket = await Basket.findOne({ where: { userId } });

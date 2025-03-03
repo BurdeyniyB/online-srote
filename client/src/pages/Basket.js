@@ -9,21 +9,21 @@ import { fetchBasket } from "../http/basketAPI";
 const Basket = observer(() => {
   const { basket, user } = useContext(Context);
   const [orderVisible, setOrderVisible] = useState(false);
+
   useEffect(() => {
-    if(user.user.id){
+    if (user.user.id) {
       fetchBasket(user.user.id).then((data) => basket.setBasketDevice(data));
     }
   }, [basket, user]);
 
   return (
     <Container className="mt-3">
-      {basket.basketDevices.length > 0 ? (
-        basket.basketDevices.map((basketItem) => (
-          <BasketItem key={basketItem.id} basketItem={basketItem} />
-        ))
-      ) : (
-        <p>Your basket is empty.</p>
-      )}
+      {basket.basketDevices
+          .filter((basketItem) => basketItem.deviceId) // Фільтруємо елементи без ID
+          .map((basketItem) => (
+            <BasketItem key={basketItem.deviceId} basketItem={basketItem} />
+          ))
+      }
       <div className="text-end">
         <Button
           className="text-end mb-4"
