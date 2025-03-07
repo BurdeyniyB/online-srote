@@ -1,0 +1,46 @@
+.credit-card-form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.credit-card-form img {
+    height: auto;
+    width: 60%;
+    margin: 25px auto;
+}
+
+.credit-card-form input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.part-block {
+    display: flex;
+    justify-content: space-between;
+}
+
+.part-size-input {
+    width: 49%;
+}
+
+.credit-card-form button {
+  background-color: #131313;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.credit-card-form button:hover {
+  background-color: #2e2e2e;
+}
+
+@media (max-width: 768px) {
+    .credit-card-form img{
+        width: 100%;
+    }
+}

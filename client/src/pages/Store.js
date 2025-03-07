@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import DropBar from "../components/DropBar";
 import DeviceList from "../components/DeviceList";
@@ -8,9 +8,13 @@ import { fetchBrands, fetchDevices, fetchTypes } from "../http/deviceAPI";
 import Pages from "../components/Pages";
 import "../style/App.css";
 import PriceFilter from "../components/PriceFilter";
+import { FaSearch } from "react-icons/fa";
+import Filter from "../components/Filter";
 
 const Store = observer(() => {
   const { device } = useContext(Context);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [timer, setTimer] = useState(null);
 
   const updateLimitBasedOnWidth = () => {
     const width = window.innerWidth;
@@ -72,42 +76,36 @@ const Store = observer(() => {
     device.setMaxPrice(max);
   };
 
+  useEffect(() => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+
+    const newTimer = window.setTimeout(() => {
+      device.setSearch(searchQuery);
+    }, 500);
+
+    setTimer(newTimer);
+  }, [searchQuery]);
+
   return (
-    <Container className="store-container">
+    <Container fluid className="store-container">
+      <div className="store-search-container">
+        <FaSearch className="store-search-icon" />
+        <input
+          type="search"
+          placeholder="Search..."
+          className="store-search-input"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
       <Row>
         <Col xs={12} md={3} className="store-col d-flex justify-content-center">
-          <div style={{ width: "100%", maxWidth: "300px" }}>
-            <PriceFilter
-              min={0}
-              max={50000}
-              onPriceChange={handlePriceChange}
-            />
-            <DropBar
-              name="Sort by"
-              items={device.sortBy}
-              selectedItems={device.selectedSortBy}
-              setSelectedItems={(items) => device.setSelectedSortBy(items)}
-              checkBox={false}
-            />
-            <DropBar
-              name="Type"
-              items={device.types}
-              selectedItems={device.selectedType} // 🔥 Масив
-              setSelectedItems={(items) => device.setSelectedType(items)}
-              checkBox={true}
-            />
-
-            <DropBar
-              name="Brand"
-              items={device.brands}
-              selectedItems={device.selectedBrand} // 🔥 Масив
-              setSelectedItems={(items) => device.setSelectedBrand(items)}
-              checkBox={true}
-            />
-          </div>
+         <Filter />
         </Col>
-        <Col xs={12} md={9} className="d-flex">
-          <div style={{ width: "100%", maxWidth: "800px" }}>
+        <Col xs={12} md={9} className="d-flex device-col">
+          <div style={{ width: "100%" }}>
             <DeviceList />
             <Pages />
           </div>

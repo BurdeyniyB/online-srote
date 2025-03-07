@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "..";
 import BasketItem from "../components/BasketItem";
 import { Button, Container } from "react-bootstrap";
 import { observer } from "mobx-react-lite";
-import CreateOrder from "../components/models/CreateOrder";
 import { fetchBasket } from "../http/basketAPI";
+import "../style/Basket.css";
+import OrderInfo from "../components/OrderInfo";
 
 const Basket = observer(() => {
   const { basket, user } = useContext(Context);
-  const [orderVisible, setOrderVisible] = useState(false);
 
   useEffect(() => {
     if (user.user.id) {
@@ -18,23 +18,21 @@ const Basket = observer(() => {
 
   return (
     <Container className="mt-3">
-      {basket.basketDevices
-          .filter((basketItem) => basketItem.deviceId) // Фільтруємо елементи без ID
-          .map((basketItem) => (
-            <BasketItem key={basketItem.deviceId} basketItem={basketItem} />
-          ))
-      }
-      <div className="text-end">
-        <Button
-          className="text-end mb-4"
-          variant="success"
-          size="lg"
-          onClick={() => setOrderVisible(true)}
-        >
-          Buy Now
-        </Button>
+      <div className="order-info-container">
+        <div className="basket-devices">
+          <h2>Shopping Cart</h2>
+          {basket.basketDevices
+            .filter((basketItem) => basketItem.deviceId) // Фільтруємо елементи без ID
+            .map((basketItem) => (
+              <BasketItem key={basketItem.deviceId} basketItem={basketItem} />
+            ))}
+        </div>
+
+        {/* Контейнер для інформації про замовлення та кнопки */}
+        <div className="order-details">
+          <OrderInfo />
+        </div>
       </div>
-      <CreateOrder show={orderVisible} onHide={() => setOrderVisible(false)} />
     </Container>
   );
 });

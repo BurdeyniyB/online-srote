@@ -6,16 +6,16 @@ export default class DeviceStore {
     this._brands = [];
     this._devices = [];
     this._sortBy = [
-      { id: "price_asc", name: "Price: Low to High" },
-      { id: "price_desc", name: "Price: High to Low" },
-      { id: "date_asc", name: "Date: Oldest First" },
-      { id: "date_desc", name: "Date: Newest First" },
+      { id: "price_asc", name: "Low to High" },
+      { id: "price_desc", name: "High to Low" },
+      { id: "date_asc", name: "Oldest First" },
+      { id: "date_desc", name: "Newest First" },
     ];
     this._minPrice = {};
     this._maxPrice = {};
     this._selectedType = [];
     this._selectedBrand = [];
-    this._selectedSortBy = {};
+    this._selectedSortBy = { id: "date_desc", name: "Newest First" };
     this._search = "";
     this._page = 1;
     this._totalCount = 0;

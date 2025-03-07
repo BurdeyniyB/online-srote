@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Card, Image, Button } from "react-bootstrap";
 import { Context } from "..";
 import { destroyDeviceFromBasket } from "../http/basketAPI";
-import { FaTimes, FaMinus, FaPlus } from "react-icons/fa"; 
+import { FaTimes, FaMinus, FaPlus } from "react-icons/fa";
 import "../style/BasketItem.css";
 import { fetchDevices } from "../http/deviceAPI";
 
@@ -12,7 +12,16 @@ const BasketItem = ({ basketItem }) => {
   const [userDevice, setUserDevice] = useState();
 
   useEffect(() => {
-    fetchDevices(null, null, null, null, "date_desc", 1, device.limit, null).then((data) => {
+    fetchDevices(
+      null,
+      null,
+      null,
+      null,
+      "date_desc",
+      1,
+      device.limit,
+      null
+    ).then((data) => {
       device.setDevices(data.rows);
       device.setTotalCount(data.count);
       setUserDevice(device.devices.find((d) => d.id === basketItem.deviceId));
@@ -41,7 +50,10 @@ const BasketItem = ({ basketItem }) => {
   const handleQuantityChange = (newQuantity) => {
     if (newQuantity < 1) return;
     setQuantity(newQuantity);
-    basket.setQuantity({ deviceId: basketItem.deviceId, quantity: newQuantity });
+    basket.setQuantity({
+      deviceId: basketItem.deviceId,
+      quantity: newQuantity,
+    });
   };
 
   return (
@@ -50,30 +62,36 @@ const BasketItem = ({ basketItem }) => {
         <Image
           src={process.env.REACT_APP_API_URL + userDevice.img}
           rounded
-          height={60}
-          width={60}
           alt={userDevice.name}
           className="basket-image"
         />
-        <div className="basket-name">{userDevice.name}</div>
-        <div className="quantity-control">
-          <Button variant="light" className="quantity-btn" onClick={() => handleQuantityChange(basketItem.quantity - 1)}>
-            <FaMinus />
-          </Button>
-          <input
-            type="number"
-            value={quantity}
-            onChange={(e) => handleQuantityChange(parseInt(e.target.value) || 1)}
-            min="1"
-          />
-          <Button variant="light" className="quantity-btn" onClick={() => handleQuantityChange(basketItem.quantity + 1)}>
-            <FaPlus />
-          </Button>
-        </div>
-        <div className="basket-price">${userDevice.price}</div>
-        <Button variant="light" onClick={handleRemove} className="basket-remove-btn">
+          <div className="basket-name">{userDevice.name}</div>
+          <div className="quantity-control">
+            <button
+              className="quantity-btn"
+              onClick={() => handleQuantityChange(basketItem.quantity - 1)}
+            >
+              <FaMinus />
+            </button>
+            <input
+              type="number"
+              value={quantity}
+              onChange={(e) =>
+                handleQuantityChange(parseInt(e.target.value) || 1)
+              }
+              min="1"
+            />
+            <button
+              className="quantity-btn"
+              onClick={() => handleQuantityChange(basketItem.quantity + 1)}
+            >
+              <FaPlus />
+            </button>
+          </div>
+        <div className="basket-price">{userDevice.price} $</div>
+        <button onClick={handleRemove} className="basket-remove-btn">
           <FaTimes />
-        </Button>
+        </button>
       </div>
     </Card>
   );

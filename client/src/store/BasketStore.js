@@ -8,33 +8,34 @@ export default class BasketStore {
   }
 
   setBasketDevice(basketDevice) {
-    console.log("basket device: " + JSON.stringify(basketDevice));
-    if(basketDevice.length < 1) return;
-    
-    if (!this._basketDevices.some((d) => d.deviceId === basketDevice.deviceId)) {
-      console.log("add device");
+    if (basketDevice.length < 1) return;
+
+    if (
+      !this._basketDevices.some((d) => d.deviceId === basketDevice.deviceId)
+    ) {
       this._basketDevices = [...this._basketDevices, basketDevice];
       this.saveToLocalStorage();
     }
-    
-    console.log("device: " + JSON.stringify(this._basketDevices));
   }
 
   setQuantity(basketDevice) {
-    const deviceItem = this._basketDevices.find((b) => b.deviceId === basketDevice.deviceId);
-    if (deviceItem) {
-        deviceItem.quantity = basketDevice.quantity;
-        this.saveToLocalStorage(); 
-    }
-}
+    console.log("set quantity");
+    this._basketDevices = this._basketDevices.map((item) =>
+      item.deviceId === basketDevice.deviceId
+        ? { ...item, quantity: basketDevice.quantity }
+        : item
+    );
+    this.saveToLocalStorage();
+  }
 
   removeBasketDevice(deviceId) {
-    this._basketDevices = this._basketDevices.filter((item) => item.deviceId !== deviceId);
+    this._basketDevices = this._basketDevices.filter(
+      (item) => item.deviceId !== deviceId
+    );
     this.saveToLocalStorage();
   }
 
   get basketDevices() {
-    console.log("basket Devivce: " + JSON.stringify(this._basketDevices));
     return this._basketDevices;
   }
 

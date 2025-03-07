@@ -1,37 +1,35 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Navbar,
-  Container,
-  Offcanvas,
-  Nav,
-  Form,
-  Button,
-} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import {
   ADMIN_ROUTE,
   BASKET_ROUTE,
+  INDEX_ROUTE,
   LOGIN_ROUTE,
   STORE_ROUTE,
 } from "../utils/const";
-import "../style/App.css";
 import { Context } from "..";
 import { observer } from "mobx-react-lite";
-import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaSignOutAlt,
   FaUserShield,
   FaShoppingCart,
-  FaSignInAlt,
+  FaUser,
+  FaHome,
+  FaListUl,
+  FaSearch,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import "../style/NavBar.css";
+import Filter from "./Filter";
 
 const NavBar = observer(() => {
   const { user, device } = useContext(Context);
   const [searchQuery, setSearchQuery] = useState("");
   const [timer, setTimer] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const navigate = useNavigate();
-  const expand = "xxl";
 
   const logOut = () => {
     user.setUser({});
@@ -52,88 +50,158 @@ const NavBar = observer(() => {
   }, [searchQuery]);
 
   return (
-    <Navbar key={expand} expand={expand} style={{ backgroundColor: "#f7f7f7" }}>
-      <Container fluid>
-        <NavLink style={{ textDecoration: "none" }} to={STORE_ROUTE}>
+    <>
+      {/* Верхній навбар */}
+      <div className="navbar">
+        <div className="navbar-container">
           <div className="mainLink">Online store</div>
-        </NavLink>
-        <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
-        <Navbar.Offcanvas
-          id={`offcanvasNavbar-expand-${expand}`}
-          aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
-          placement="end"
-        >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-              Offcanvas
-            </Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 pe-3" />
-            <Form className="d-flex flex-column align-items-center search">
-              <div className="d-flex gap-2">
-                <Form.Control
-                  type="search"
-                  placeholder="Search"
-                  className="me-2"
-                  aria-label="Search"
-                  value={searchQuery} // Підключаємо локальний стан
-                  onChange={(e) => setSearchQuery(e.target.value)} // Обробник для зміни пошукового запиту
-                />
-                {/* <Button
-                  variant="outline-dark"
-                  className="custom-button"
-                  onClick={handleSearchSubmit}
-                >
-                  Search
-                </Button> */}
-              </div>
-            </Form>
-            <Button
-              title="Basket"
+          <div className="search-container">
+            <FaSearch className="search-icon" />
+            <input
+              type="search"
+              placeholder="Search..."
+              className="search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          {/* Кнопки праворуч на великих екранах */}
+          <div className="desktop-buttons">
+            <button
               className="custom-button"
-              variant="none"
+              title="Home"
+              onClick={() => navigate(INDEX_ROUTE)}
+            >
+              <FaHome size={20} />
+            </button>
+            <button
+              className="custom-button"
+              title="Catalog"
+              onClick={() => navigate(STORE_ROUTE)}
+            >
+              <FaListUl size={20} />
+            </button>
+            <button
+              className="custom-button"
+              title="Basket"
               onClick={() => navigate(BASKET_ROUTE)}
             >
               <FaShoppingCart size={20} />
-            </Button>
+            </button>
+
             {user.isAuth ? (
-              <Nav className="ml-auto" style={{ height: 40 }}>
-                <Button
-                  title="Log out"
+              <>
+                <button
                   className="custom-button"
-                  variant="none"
+                  title="Log out"
                   onClick={logOut}
                 >
                   <FaSignOutAlt size={20} />
-                </Button>
+                </button>
                 {user.user.role === "ADMIN" && (
-                  <Button
-                    title="Admin"
+                  <button
                     className="custom-button"
-                    variant="none"
+                    title="Admin"
                     onClick={() => navigate(ADMIN_ROUTE)}
                   >
                     <FaUserShield size={20} />
-                  </Button>
+                  </button>
                 )}
-              </Nav>
+              </>
             ) : (
-              <Nav className="ml-auto">
-                <Button
-                  title="Sing in"
-                  className="custom-button"
-                  variant="none"
-                  onClick={() => navigate(LOGIN_ROUTE)}
-                >
-                  <FaSignInAlt size={20} />
-                </Button>
-              </Nav>
+              <button
+                className="custom-button"
+                title="Sign in"
+                onClick={() => navigate(LOGIN_ROUTE)}
+              >
+                <FaUser size={20} />
+              </button>
             )}
-          </Offcanvas.Body>
-        </Navbar.Offcanvas>
-      </Container>
-    </Navbar>
+          </div>
+          <button className="menu-button" onClick={() => setMenuOpen(true)}>
+            <FaBars size={24} />
+          </button>
+        </div>
+      </div>
+      <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+        <button className="close-button" onClick={() => setMenuOpen(false)}>
+          <FaTimes size={24} />
+        </button>
+        <Filter />
+        {user.isAuth ? (
+          <>
+            <button className="mobile-menu-button" onClick={logOut}>
+              Log out
+            </button>
+            {user.user.role === "ADMIN" && (
+              <button
+                className="mobile-menu-button"
+                onClick={() => navigate(ADMIN_ROUTE)}
+              >
+                Admin
+              </button>
+            )}
+          </>
+        ) : (
+          <button
+            className="mobile-menu-button"
+            onClick={() => navigate(LOGIN_ROUTE)}
+          >
+            Sign in
+          </button>
+        )}
+      </div>
+
+      {/* Нижній контейнер для мобільних екранів */}
+      <div className="mobile-bottom-nav">
+        <button
+          className="mobile-button"
+          title="Home"
+          onClick={() => navigate(INDEX_ROUTE)}
+        >
+          <FaHome size={24} />
+        </button>
+        <button
+          className="mobile-button"
+          title="Catalog"
+          onClick={() => navigate(STORE_ROUTE)}
+        >
+          <FaListUl size={24} />
+        </button>
+        <button
+          className="mobile-button"
+          title="Basket"
+          onClick={() => navigate(BASKET_ROUTE)}
+        >
+          <FaShoppingCart size={24} />
+        </button>
+
+        {user.isAuth ? (
+          <>
+            <button className="mobile-button" title="Log out" onClick={logOut}>
+              <FaSignOutAlt size={24} />
+            </button>
+            {user.user.role === "ADMIN" && (
+              <button
+                className="mobile-button"
+                title="Admin"
+                onClick={() => navigate(ADMIN_ROUTE)}
+              >
+                <FaUserShield size={24} />
+              </button>
+            )}
+          </>
+        ) : (
+          <button
+            className="mobile-button"
+            title="Sign in"
+            onClick={() => navigate(LOGIN_ROUTE)}
+          >
+            <FaUser size={24} />
+          </button>
+        )}
+      </div>
+    </>
   );
 });
 
