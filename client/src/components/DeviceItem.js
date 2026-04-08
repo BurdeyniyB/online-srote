@@ -38,7 +38,7 @@ const DeviceItem = observer(({ device }) => {
       <Card className="device-card" border="light">
         <div className="image-container">
           <Image
-            src={process.env.REACT_APP_API_URL + device.img}
+            src={process.env.REACT_APP_API_URL + '/' + device.img}
             alt={device.name}
             className="device-image-main"
           />
