@@ -33,10 +33,15 @@ const DeviceItem = observer(({ device }) => {
   const titleRaw = commaIndex !== -1 ? device.name.slice(0, commaIndex) : device.name;
   const subtitleRaw = commaIndex !== -1 ? device.name.slice(commaIndex + 1).trim() : "";
 
-  const TITLE_LIMIT = 40;
-  const SUBTITLE_LIMIT = 80;
-  const title = titleRaw.length > TITLE_LIMIT ? titleRaw.slice(0, TITLE_LIMIT) + "…" : titleRaw;
-  const subtitle = subtitleRaw.length > SUBTITLE_LIMIT ? subtitleRaw.slice(0, SUBTITLE_LIMIT) + "…" : subtitleRaw;
+  const truncate = (str, limit) => {
+    if (str.length <= limit) return str;
+    const cut = str.slice(0, limit);
+    const lastSpace = cut.lastIndexOf(" ");
+    return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut) + "…";
+  };
+
+  const title = truncate(titleRaw, 40);
+  const subtitle = truncate(subtitleRaw, 80);
 
   return (
     <Card
