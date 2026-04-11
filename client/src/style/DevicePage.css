@@ -303,8 +303,8 @@
   max-width: 100%;
 }
 
-/* ── See more button ── */
-.see-more-btn {
+/* ── Specs "see more" (device page only) ── */
+.specs-see-more {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -320,7 +320,7 @@
   z-index: 1;
 }
 
-.see-more-btn:hover {
+.specs-see-more:hover {
   color: #111;
   text-decoration: underline;
 }

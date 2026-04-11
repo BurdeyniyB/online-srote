@@ -194,7 +194,7 @@ const DevicePage = observer(() => {
           )}
 
           {isClamped && (
-            <button className="see-more-btn" onClick={() => setSpecsExpanded(true)}>
+            <button className="specs-see-more" onClick={() => setSpecsExpanded(true)}>
               See more
             </button>
           )}
