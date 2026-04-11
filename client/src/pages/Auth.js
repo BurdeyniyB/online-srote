@@ -27,7 +27,7 @@ const Auth = observer(() => {
       user.setIsAuth(true);
       navigate(STORE_ROUTE);
     } catch (e) {
-      alert(e.response.data);
+      alert(e.response?.data?.message || "An error occurred");
     }
   };
 
