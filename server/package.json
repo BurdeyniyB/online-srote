@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon node.js"
+    "start": "node index.js",
+    "build": "npx sequelize-cli db:migrate",
+    "dev": "sh -c 'lsof -ti:${PORT:-8000} | xargs -r kill -9 2>/dev/null; nodemon index.js'"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +15,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
+    "csv-parse": "^6.2.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-fileupload": "^1.5.1",

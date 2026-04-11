@@ -44,7 +44,7 @@ const DeviceItem = observer(({ device }) => {
           />
         </div>
         <div className="device-name">{device.name}</div>
-        <div className="device-price">{device.price} грн</div>
+        <div className="device-price">${device.price}</div>
         <Button
           onClick={addDeviceToBasket}
           className="basket-button"

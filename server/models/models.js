@@ -24,14 +24,22 @@ const Rating = sequelize.define("rating", {
 });
 
 const Device = sequelize.define("device", {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  name: { type: DataTypes.STRING, unique: true, allowNull: false },
-  description: { type: DataTypes.STRING },
-  price: { type: DataTypes.INTEGER, allowNull: false },
-  img: { type: DataTypes.STRING, allowNull: false },
-  inStock: { type: DataTypes.BOOLEAN, defaultValue: true }, // Наявність товару
-  sale: { type: DataTypes.INTEGER, allowNull: true }, // Відсоток знижки
-  isHidden: { type: DataTypes.BOOLEAN, defaultValue: false }, // Чи прихований товар
+  id:           { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  amazonId:     { type: DataTypes.STRING,  unique: true, allowNull: true },
+  source:       { type: DataTypes.STRING,  allowNull: true },
+  name:         { type: DataTypes.STRING,  unique: true, allowNull: false },
+  price:        { type: DataTypes.FLOAT,   allowNull: false },
+  priceText:    { type: DataTypes.STRING,  allowNull: true },
+  rating:       { type: DataTypes.FLOAT,   allowNull: true },
+  reviewCount:  { type: DataTypes.INTEGER, allowNull: true },
+  availability: { type: DataTypes.STRING,  allowNull: true },
+  img:          { type: DataTypes.STRING,  allowNull: false },
+  imageUrls:    { type: DataTypes.JSONB,   allowNull: true },
+  imagesCount:  { type: DataTypes.INTEGER, allowNull: true },
+  specs:        { type: DataTypes.JSONB,   allowNull: true },
+  inStock:      { type: DataTypes.BOOLEAN, defaultValue: true },
+  sale:         { type: DataTypes.INTEGER, defaultValue: 0 },
+  isHidden:     { type: DataTypes.BOOLEAN, defaultValue: false },
 });
 
 const Type = sequelize.define("type", {

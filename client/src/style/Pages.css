@@ -1,24 +1,71 @@
-.pagination {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .pagination .page-item .page-link {
-    background-color: black;
-    color: white;
-    border-color: black;
-    display: flex;
-    justify-content: center;
-  }
-  
-  .pagination .page-item.active .page-link {
-    background-color: white;
-    color: black;
-    border-color: black;
-  }
-  
-  .pagination .page-item .page-link:hover {
-    background-color: #333;
-    border-color: #333;
-  }
-  
+.pages-outer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.see-more-btn {
+  background-color: #111;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 10px 32px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.see-more-btn:hover {
+  background-color: #333;
+}
+
+.pages-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pages-label {
+  font-size: 14px;
+  color: #555;
+  white-space: nowrap;
+}
+
+.pages-wrapper .pagination {
+  margin: 0;
+}
+
+.pages-wrapper .page-item .page-link {
+  background-color: #111;
+  color: #fff;
+  border-color: #111;
+  border-radius: 6px !important;
+  margin: 0 2px;
+  min-width: 36px;
+  text-align: center;
+}
+
+.pages-wrapper .page-item.active .page-link {
+  background-color: #fff;
+  color: #111;
+  border-color: #111;
+}
+
+.pages-wrapper .page-item .page-link:hover {
+  background-color: #333;
+  border-color: #333;
+  color: #fff;
+}
+
+.pages-wrapper .page-item.active .page-link:hover {
+  background-color: #f0f0f0;
+  color: #111;
+}
+
+.pages-wrapper .page-item.disabled .page-link {
+  background-color: #555;
+  border-color: #555;
+  color: #aaa;
+}
