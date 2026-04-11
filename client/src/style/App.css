@@ -30,20 +30,20 @@ html, body {
 
 .device-list-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  align-items: start;
+  width: 100%;
 }
 
-/* Загальний стиль для карток */
 .device-card {
   width: 100%;
   cursor: pointer;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Плавне збільшення і тінь */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легка тінь */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 10px;
   text-align: center;
   min-height: 300px;
-  min-width: 210px;
-  max-width: 300px;
 }
 
 .device-card:hover {
@@ -52,10 +52,31 @@ html, body {
 }
 
 .device-name {
+  margin-top: 10px;
+  height: 80px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.device-name-title {
   font-size: 1rem;
   font-weight: bold;
-  margin-top: 10px;
-  min-height: 50px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.device-name-subtitle {
+  font-size: 0.78rem;
+  font-weight: normal;
+  color: #555;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .device-price {
@@ -149,21 +170,8 @@ html, body {
 
 
 @media (max-width: 485px) {
-  .col-position{
-    display: flex;
-    justify-content: center;
-  }
-
   .device-card {
-    width: 100%;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Плавне збільшення і тінь */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легка тінь */
-    padding: 10px;
-    text-align: center;
     min-height: 260px;
-    min-width: 170px;
-    max-width: 260px;
   }
 
   .device-image-main {
@@ -172,34 +180,14 @@ html, body {
     height: 120px;
     width: auto;
   }
-
-  .device-list-container {
-    grid-template-columns: repeat(2, 1fr); /* 3 колонки для середніх екранів */
-  }
 }
 
-@media (min-width: 485px) and (max-width: 780px) {
-  .device-list-container {
-    grid-template-columns: repeat(2, 1fr); /* 3 колонки для середніх екранів */
-  }
-}
-
-@media (min-width: 780px) and (max-width: 1260px) {
-  .device-list-container {
-    grid-template-columns: repeat(3, 1fr); /* 4 колонки для ширших екранів */
-  }
-}
-
-@media (min-width: 1260px) and (max-width: 1400px) {
-  .device-list-container {
-    grid-template-columns: repeat(4, 1fr); /* 5 колонок для великих екранів */
-  }
-}
-
-@media (min-width: 1600px) {
-  .device-list-container {
-    grid-template-columns: repeat(5, 1fr); /* 5 колонок для великих екранів */
-  }
+.device-scroll-wrapper {
+  width: 100%;
+  max-height: calc(100vh - 180px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 @media (max-width: 950px) {

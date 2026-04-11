@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import DropBar from "../components/DropBar";
 import DeviceList from "../components/DeviceList";
@@ -15,40 +15,15 @@ const Store = observer(() => {
   const { device } = useContext(Context);
   const [searchQuery, setSearchQuery] = useState("");
   const [timer, setTimer] = useState(null);
-
-  const updateLimitBasedOnWidth = () => {
-    const width = window.innerWidth;
-    if (width >= 780 && width <= 1400) {
-      console.log("size:", 10);
-      device.setlimit(10); // Великий екран
-    }
-  };
-
-  useEffect(() => {
-    updateLimitBasedOnWidth();
-    window.addEventListener("resize", updateLimitBasedOnWidth);
-    return () => window.removeEventListener("resize", updateLimitBasedOnWidth);
-  }, []);
+  const appendNextFetch = useRef(false);
 
   useEffect(() => {
     fetchTypes().then((data) => device.setTypes(data));
     fetchBrands().then((data) => device.setBrands(data));
-    fetchDevices(
-      null,
-      null,
-      null,
-      null,
-      "date_desc",
-      1,
-      device.limit,
-      null,
-    ).then((data) => {
-      device.setDevices(data.rows);
-      device.setTotalCount(data.count);
-    });
-  }, []);
+  }, [device]);
 
   useEffect(() => {
+    if (!device.limit) return;
     fetchDevices(
       device.selectedType.map((t) => t.id).join(","),
       device.selectedBrand.map((b) => b.id).join(","),
@@ -59,10 +34,16 @@ const Store = observer(() => {
       device.limit,
       device.search,
     ).then((data) => {
-      device.setDevices(data.rows);
+      if (appendNextFetch.current) {
+        device.appendDevices(data.rows);
+        appendNextFetch.current = false;
+      } else {
+        device.setDevices(data.rows);
+      }
       device.setTotalCount(data.count);
     });
   }, [
+    device,
     device.selectedType,
     device.selectedBrand,
     device.minPrice,
@@ -70,6 +51,7 @@ const Store = observer(() => {
     device.selectedSortBy,
     device.page,
     device.search,
+    device.limit,
   ]);
 
   const handlePriceChange = ({ min, max }) => {
@@ -106,12 +88,12 @@ const Store = observer(() => {
           <Filter />
         </Col>
         <Col xs={12} md={9} className="d-flex device-col">
-          <div style={{ width: "100%" }}>
+          <div className="device-scroll-wrapper">
             <DeviceList />
-            <Pages />
           </div>
         </Col>
       </Row>
+      <Pages onLoadMore={() => { appendNextFetch.current = true; }} />
     </Container>
   );
 });

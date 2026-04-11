@@ -19,7 +19,7 @@ export default class DeviceStore {
     this._search = "";
     this._page = 1;
     this._totalCount = 0;
-    this._limit = 10;
+    this._limit = 0;
     makeAutoObservable(this);
   }
 
@@ -33,6 +33,10 @@ export default class DeviceStore {
 
   setDevices(devices) {
     this._devices = devices;
+  }
+
+  appendDevices(devices) {
+    this._devices = [...this._devices, ...devices];
   }
 
   setSelectedType(type) {

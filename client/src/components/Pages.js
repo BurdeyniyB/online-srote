@@ -4,7 +4,7 @@ import { Context } from "..";
 import { Pagination } from "react-bootstrap";
 import "../style/Pages.css";
 
-const Pages = observer(() => {
+const Pages = observer(({ onLoadMore }) => {
   const { device } = useContext(Context);
   const pageCount = Math.ceil(device.totalCount / device.limit);
 
@@ -12,6 +12,7 @@ const Pages = observer(() => {
 
   const current = device.page;
   const remaining = device.totalCount - current * device.limit;
+  const nextPageCount = Math.min(device.limit, remaining);
 
   const getItems = () => {
     const items = [];
@@ -33,9 +34,9 @@ const Pages = observer(() => {
       {remaining > 0 && (
         <button
           className="see-more-btn"
-          onClick={() => device.setPage(current + 1)}
+          onClick={() => { onLoadMore?.(); device.setPage(current + 1); }}
         >
-          See more {remaining} items
+          See more {nextPageCount} items
         </button>
       )}
 
