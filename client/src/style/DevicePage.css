@@ -266,6 +266,43 @@
   word-break: break-word;
 }
 
+/* ── Similar products ── */
+.similar-section {
+  margin-top: 40px;
+}
+
+.similar-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.similar-list {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.similar-list::-webkit-scrollbar {
+  height: 5px;
+}
+
+.similar-list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.similar-item {
+  flex-shrink: 0;
+  width: 220px;
+}
+
+.similar-item .device-card {
+  width: 100%;
+  max-width: 100%;
+}
+
 /* ── See more button ── */
 .see-more-btn {
   position: absolute;

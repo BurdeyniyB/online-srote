@@ -1,11 +1,12 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button, Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { fetchOneDevice } from "../http/deviceAPI";
+import { fetchOneDevice, fetchDevices } from "../http/deviceAPI";
 import { addToBasket } from "../http/basketAPI";
 import { Context } from "..";
 import { observer } from "mobx-react-lite";
 import { FaShoppingCart, FaChevronDown } from "react-icons/fa";
+import DeviceItem from "../components/DeviceItem";
 import "../style/DevicePage.css";
 
 const EXCLUDED_SPEC_KEYS = new Set([
@@ -47,6 +48,7 @@ const DevicePage = observer(() => {
   const [specsExpanded, setSpecsExpanded] = useState(false);
   const [additionalOpen, setAdditionalOpen] = useState(false);
   const [galleryHeight, setGalleryHeight] = useState(null);
+  const [similar, setSimilar] = useState([]);
   const galleryRef = useRef(null);
   const { id } = useParams();
 
@@ -56,6 +58,10 @@ const DevicePage = observer(() => {
       setActiveIndex(0);
       setSpecsExpanded(false);
       setAdditionalOpen(false);
+      if (data.typeId) {
+        fetchDevices(data.typeId, undefined, undefined, undefined, undefined, 1, 10)
+          .then((res) => setSimilar((res.rows || []).filter((d) => d.id !== data.id)));
+      }
     });
   }, [id]);
 
@@ -194,6 +200,19 @@ const DevicePage = observer(() => {
           )}
         </div>
       </div>
+
+      {similar.length > 0 && (
+        <div className="similar-section">
+          <h2 className="similar-title">Similar products</h2>
+          <div className="similar-list">
+            {similar.map((d) => (
+              <div key={d.id} className="similar-item">
+                <DeviceItem device={d} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </Container>
   );
 });
