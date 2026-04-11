@@ -229,6 +229,33 @@
   color: #f0a500;
 }
 
+/* ===== BASKET BADGE ===== */
+.basket-btn-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.basket-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background-color: #f0a500;
+  color: #1a1a1a;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  line-height: 1;
+  pointer-events: none;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .desktop-buttons {

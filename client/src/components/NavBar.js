@@ -24,7 +24,8 @@ import "../style/NavBar.css";
 import Filter from "./Filter";
 
 const NavBar = observer(() => {
-  const { user, device } = useContext(Context);
+  const { user, device, basket } = useContext(Context);
+  const basketCount = basket.basketDevices.reduce((sum, item) => sum + (item.quantity || 1), 0);
   const [searchQuery, setSearchQuery] = useState("");
   const [timer, setTimer] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -83,13 +84,18 @@ const NavBar = observer(() => {
             >
               <FaListUl size={20} />
             </button>
-            <button
-              className="custom-button"
-              title="Basket"
-              onClick={() => navigate(BASKET_ROUTE)}
-            >
-              <FaShoppingCart size={20} />
-            </button>
+            <div className="basket-btn-wrapper">
+              <button
+                className="custom-button"
+                title="Basket"
+                onClick={() => navigate(BASKET_ROUTE)}
+              >
+                <FaShoppingCart size={20} />
+              </button>
+              {basketCount > 0 && (
+                <span className="basket-badge">{basketCount}</span>
+              )}
+            </div>
 
             {user.isAuth ? (
               <>
@@ -170,13 +176,18 @@ const NavBar = observer(() => {
         >
           <FaListUl size={24} />
         </button>
-        <button
-          className="mobile-button"
-          title="Basket"
-          onClick={() => navigate(BASKET_ROUTE)}
-        >
-          <FaShoppingCart size={24} />
-        </button>
+        <div className="basket-btn-wrapper">
+          <button
+            className="mobile-button"
+            title="Basket"
+            onClick={() => navigate(BASKET_ROUTE)}
+          >
+            <FaShoppingCart size={24} />
+          </button>
+          {basketCount > 0 && (
+            <span className="basket-badge">{basketCount}</span>
+          )}
+        </div>
 
         {user.isAuth ? (
           <>
