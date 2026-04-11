@@ -2,7 +2,7 @@ const uuid = require("uuid");
 const path = require("path");
 const { Device, DeviceInfo } = require("../models/models");
 const ApiError = require("../error/ApiError");
-const { Op } = require("sequelize");
+const { Op, literal } = require("sequelize");
 
 class DeviceController {
   async create(req, res, next) {
@@ -68,7 +68,7 @@ class DeviceController {
         ? {
             [Op.or]: [
               { name: { [Op.iLike]: `%${search}%` } },
-              { description: { [Op.iLike]: `%${search}%` } },
+              literal(`"device"."specs"::text ILIKE '%${search.replace(/'/g, "''")}%'`),
             ],
           }
         : {};
