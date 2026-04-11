@@ -6,7 +6,7 @@ import "../style/App.css";
 import { observer } from "mobx-react-lite";
 import { Context } from "..";
 import { addToBasket } from "../http/basketAPI";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
 const DeviceItem = observer(({ device }) => {
   const navigate = useNavigate();
@@ -43,6 +43,24 @@ const DeviceItem = observer(({ device }) => {
   const title = truncate(titleRaw, 40);
   const subtitle = truncate(subtitleRaw, 80);
 
+  const discountedPrice = device.sale > 0
+    ? (device.price * (1 - device.sale / 100)).toFixed(2)
+    : null;
+
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (rating >= i) {
+        stars.push(<FaStar key={i} className="star-filled" />);
+      } else if (rating >= i - 0.5) {
+        stars.push(<FaStarHalfAlt key={i} className="star-filled" />);
+      } else {
+        stars.push(<FaRegStar key={i} className="star-empty" />);
+      }
+    }
+    return stars;
+  };
+
   return (
     <Card
       className="device-card"
@@ -60,7 +78,34 @@ const DeviceItem = observer(({ device }) => {
         <span className="device-name-title">{title}</span>
         {subtitle && <span className="device-name-subtitle">{subtitle}</span>}
       </div>
-      <div className="device-price">${device.price}</div>
+
+      <div className="device-meta">
+        <div className="device-rating">
+          {device.rating != null ? (
+            <>
+              {renderStars(device.rating)}
+              <span className="device-rating-value">{device.rating.toFixed(1)}</span>
+            </>
+          ) : (
+            <span className="device-rating-none">No rating</span>
+          )}
+        </div>
+        <div className={`device-stock ${device.inStock ? "device-stock--in" : "device-stock--out"}`}>
+          {device.inStock ? "In Stock" : "Out of Stock"}
+        </div>
+      </div>
+
+      <div className="device-price">
+        {discountedPrice ? (
+          <div className="device-price-sale">
+            <span className="device-price-current">${discountedPrice}</span>
+            <span className="device-price-old">${device.price}</span>
+          </div>
+        ) : (
+          <span>${device.price}</span>
+        )}
+      </div>
+
       <Button
         onClick={addDeviceToBasket}
         className="basket-button"

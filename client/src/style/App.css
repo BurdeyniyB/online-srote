@@ -83,14 +83,90 @@ body {
   overflow: hidden;
 }
 
+.device-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0 2px;
+  gap: 4px;
+}
+
+.device-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.star-filled {
+  color: #f0a500;
+}
+
+.star-empty {
+  color: #d1d5db;
+}
+
+.device-rating-value {
+  margin-left: 3px;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.device-rating-none {
+  font-size: 0.72rem;
+  color: #9ca3af;
+}
+
 .device-price {
   font-size: 1.1rem;
   font-weight: bold;
   color: black;
-  margin: 10px 0px;
+  margin: 6px 0;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.device-price-sale {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.device-price-current {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #111;
+}
+
+.device-price-old {
+  font-size: 0.85rem;
+  font-weight: normal;
+  color: #e53935;
+  text-decoration: line-through;
+}
+
+.device-stock {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.device-stock--in {
+  background-color: #e6f4ea;
+  color: #2e7d32;
+}
+
+.device-stock--out {
+  background-color: #fdecea;
+  color: #c62828;
 }
 
 .basket-button {
