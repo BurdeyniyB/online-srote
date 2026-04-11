@@ -42,7 +42,7 @@ function getDescription(device) {
 }
 
 const DevicePage = observer(() => {
-  const { user } = useContext(Context);
+  const { user, basket } = useContext(Context);
   const [device, setDevice] = useState({ info: [] });
   const [activeIndex, setActiveIndex] = useState(0);
   const [specsExpanded, setSpecsExpanded] = useState(false);
@@ -77,7 +77,9 @@ const DevicePage = observer(() => {
 
   const addDeviceToBasket = async () => {
     try {
-      await addToBasket({ userId: user.user.id, deviceId: device.id });
+      const basketData = { userId: user.user.id, deviceId: device.id, quantity: 1 };
+      basket.setBasketDevice(basketData);
+      await addToBasket(basketData);
     } catch (error) {
       console.error("Failed to add product to basket:", error);
     }

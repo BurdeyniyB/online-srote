@@ -60,12 +60,12 @@ const BasketItem = ({ basketItem }) => {
     <Card className="basket-card">
       <div className="basket-content">
         <Image
-          src={process.env.REACT_APP_API_URL + userDevice.img}
+          src={Array.isArray(userDevice.img) ? userDevice.img[0] : userDevice.img}
           rounded
           alt={userDevice.name}
           className="basket-image"
         />
-          <div className="basket-name">{userDevice.name}</div>
+          <div className="basket-name">{userDevice.name.split(',')[0]}</div>
           <div className="quantity-control">
             <button
               className="quantity-btn"
