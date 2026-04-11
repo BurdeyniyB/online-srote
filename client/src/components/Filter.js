@@ -14,7 +14,7 @@ const RATING_OPTIONS = [
 
 const Filter = () => {
   const { device } = useContext(Context);
-  const [statusOpen, setStatusOpen] = useState(false);
+  const [statusOpen, setStatusOpen] = useState(true);
 
   const handlePriceChange = ({ min, max }) => {
     device.setMinPrice(min);
@@ -40,6 +40,7 @@ const Filter = () => {
         selectedItems={device.selectedSortBy}
         setSelectedItems={(items) => device.setSelectedSortBy(items)}
         checkBox={false}
+        defaultOpen={true}
       />
 
       <DropBar
@@ -48,6 +49,7 @@ const Filter = () => {
         selectedItems={selectedRating}
         setSelectedItems={(item) => device.setMinRating(selectedRating?.id === item.id ? null : item.id)}
         checkBox={false}
+        defaultOpen={true}
       />
 
       <div className="filter-section">

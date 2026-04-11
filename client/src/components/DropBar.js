@@ -3,8 +3,8 @@ import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import "../style/DropBar.css";
 
-const DropBar = observer(({ name, items, selectedItems, setSelectedItems, checkBox = true }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const DropBar = observer(({ name, items, selectedItems, setSelectedItems, checkBox = true, defaultOpen = false }) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
 
   const handleItemClick = (item) => {
     if (checkBox) {

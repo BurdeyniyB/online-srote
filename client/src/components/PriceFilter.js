@@ -6,7 +6,7 @@ const PriceFilter = ({ min, max, onPriceChange }) => {
   const [timer, setTimer] = useState(null);
   const [minPrice, setMinPrice] = useState(min);
   const [maxPrice, setMaxPrice] = useState(max);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const triggerChange = (newMin, newMax) => {
     if (timer) clearTimeout(timer);
