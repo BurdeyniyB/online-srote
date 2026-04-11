@@ -51,7 +51,7 @@ const DeviceItem = observer(({ device }) => {
     >
       <div className="image-container">
         <Image
-          src={process.env.REACT_APP_API_URL + '/' + device.img}
+          src={Array.isArray(device.img) ? device.img[0] : device.img}
           alt={device.name}
           className="device-image-main"
         />

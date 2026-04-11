@@ -35,7 +35,7 @@ const DevicePage = observer(() => {
         <Image
           width={300}
           className="device-image"
-          src={`${process.env.REACT_APP_API_URL}/${device.img}`}
+          src={Array.isArray(device.img) ? device.img[0] : device.img}
           alt={device.name}
         />
         <div className="device-info">
