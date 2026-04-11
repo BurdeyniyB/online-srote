@@ -33,6 +33,9 @@ const Store = observer(() => {
       device.page,
       device.limit,
       device.search,
+      device.minRating,
+      device.inStockOnly || undefined,
+      device.onSaleOnly || undefined,
     ).then((data) => {
       if (appendNextFetch.current) {
         device.appendDevices(data.rows);
@@ -52,6 +55,9 @@ const Store = observer(() => {
     device.page,
     device.search,
     device.limit,
+    device.minRating,
+    device.inStockOnly,
+    device.onSaleOnly,
   ]);
 
   const handlePriceChange = ({ min, max }) => {

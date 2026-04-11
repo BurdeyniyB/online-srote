@@ -40,7 +40,7 @@ class DeviceController {
 
   async getAll(req, res) {
     try {
-      let { brandId, typeId, minPrice, maxPrice, sortBy, limit, page, search } =
+      let { brandId, typeId, minPrice, maxPrice, sortBy, limit, page, search, minRating, inStockOnly, onSaleOnly } =
         req.query;
       page = parseInt(page) || 1;
       limit = parseInt(limit) || 20;
@@ -87,6 +87,9 @@ class DeviceController {
         ...priceCondition,
         ...(brandId && brandId.length ? { brandId: { [Op.in]: brandId } } : {}),
         ...(typeId && typeId.length ? { typeId: { [Op.in]: typeId } } : {}),
+        ...(minRating ? { rating: { [Op.gte]: parseFloat(minRating) } } : {}),
+        ...(inStockOnly === "true" ? { inStock: true } : {}),
+        ...(onSaleOnly === "true" ? { sale: { [Op.gt]: 0 } } : {}),
       };
 
       let order = [];

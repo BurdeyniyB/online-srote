@@ -17,6 +17,9 @@ export default class DeviceStore {
     this._selectedBrand = [];
     this._selectedSortBy = { id: "date_desc", name: "Newest First" };
     this._search = "";
+    this._minRating = null;
+    this._inStockOnly = false;
+    this._onSaleOnly = false;
     this._page = 1;
     this._totalCount = 0;
     this._limit = 0;
@@ -80,6 +83,18 @@ export default class DeviceStore {
     this._search = search;
   }
 
+  setMinRating(rating) {
+    this._minRating = rating;
+  }
+
+  setInStockOnly(val) {
+    this._inStockOnly = val;
+  }
+
+  setOnSaleOnly(val) {
+    this._onSaleOnly = val;
+  }
+
   setlimit(limit) {
     this._limit = limit;
   }
@@ -130,6 +145,18 @@ export default class DeviceStore {
 
   get search() {
     return this._search;
+  }
+
+  get minRating() {
+    return this._minRating;
+  }
+
+  get inStockOnly() {
+    return this._inStockOnly;
+  }
+
+  get onSaleOnly() {
+    return this._onSaleOnly;
   }
 
   get limit() {
