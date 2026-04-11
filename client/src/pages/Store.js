@@ -19,7 +19,8 @@ const Store = observer(() => {
   const updateLimitBasedOnWidth = () => {
     const width = window.innerWidth;
     if (width >= 780 && width <= 1400) {
-      device.setlimit(9); // Великий екран
+      console.log("size:", 10);
+      device.setlimit(10); // Великий екран
     }
   };
 
@@ -40,7 +41,7 @@ const Store = observer(() => {
       "date_desc",
       1,
       device.limit,
-      null
+      null,
     ).then((data) => {
       device.setDevices(data.rows);
       device.setTotalCount(data.count);
@@ -56,7 +57,7 @@ const Store = observer(() => {
       device.selectedSortBy.id,
       device.page,
       device.limit,
-      device.search
+      device.search,
     ).then((data) => {
       device.setDevices(data.rows);
       device.setTotalCount(data.count);
@@ -102,7 +103,7 @@ const Store = observer(() => {
       </div>
       <Row>
         <Col xs={12} md={3} className="store-col d-flex justify-content-center">
-         <Filter />
+          <Filter />
         </Col>
         <Col xs={12} md={9} className="d-flex device-col">
           <div style={{ width: "100%" }}>

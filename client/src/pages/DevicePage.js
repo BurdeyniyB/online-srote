@@ -35,14 +35,20 @@ const DevicePage = observer(() => {
         <Image
           width={300}
           className="device-image"
-          src={`${process.env.REACT_APP_API_URL}${device.img}`}
+          src={`${process.env.REACT_APP_API_URL}/${device.img}`}
           alt={device.name}
         />
         <div className="device-info">
           <h2>{device.name}</h2>
           <p>{device.description}</p>
-          <p><strong>Price:</strong> {device.price} $</p>
-          <Button variant="outline-dark" className="add-to-basket" onClick={addDeviceToBasket}>
+          <p>
+            <strong>Price:</strong> {device.price} $
+          </p>
+          <Button
+            variant="outline-dark"
+            className="add-to-basket"
+            onClick={addDeviceToBasket}
+          >
             Add to basket
           </Button>
 

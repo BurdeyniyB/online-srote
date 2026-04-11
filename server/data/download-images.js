@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const https = require("https");
 
-const staticDir = path.resolve(__dirname, "static");
+const staticDir = path.resolve(__dirname, "..", "static");
 
 const images = [
   {

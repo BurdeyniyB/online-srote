@@ -19,7 +19,7 @@ export default class DeviceStore {
     this._search = "";
     this._page = 1;
     this._totalCount = 0;
-    this._limit = 8;
+    this._limit = 10;
     makeAutoObservable(this);
   }
 
@@ -46,7 +46,9 @@ export default class DeviceStore {
 
   setSelectedBrand(brand) {
     if (this._selectedBrand.some((b) => b.id === brand.id)) {
-      this._selectedBrand = this._selectedBrand.filter((b) => b.id !== brand.id);
+      this._selectedBrand = this._selectedBrand.filter(
+        (b) => b.id !== brand.id,
+      );
     } else {
       this._selectedBrand = [...this._selectedBrand, brand];
     }
@@ -62,11 +64,11 @@ export default class DeviceStore {
     console.log("selected sort:" + this._selectedSortBy);
   }
 
-  setMinPrice(minPrice){
+  setMinPrice(minPrice) {
     this._minPrice = minPrice;
   }
 
-  setMaxPrice(maxPrice){
+  setMaxPrice(maxPrice) {
     this._maxPrice = maxPrice;
   }
 
@@ -114,7 +116,7 @@ export default class DeviceStore {
     return this._selectedSortBy;
   }
 
-  get minPrice(){
+  get minPrice() {
     return this._minPrice;
   }
 

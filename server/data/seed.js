@@ -1,7 +1,7 @@
 require("dotenv").config();
 
-const sequelize = require("./db");
-const { Brand, Type, Device, DeviceInfo } = require("./models/models");
+const sequelize = require("../db");
+const { Brand, Type, Device, DeviceInfo } = require("../models/models");
 
 const brands = [
   "Apple",

@@ -54,7 +54,9 @@ const NavBar = observer(() => {
       {/* Верхній навбар */}
       <div className="navbar">
         <div className="navbar-container">
-          <div className="mainLink">Online store</div>
+          <div className="mainLink" onClick={() => navigate(INDEX_ROUTE)}>
+            Online<span className="mainLink-accent">.Store</span>
+          </div>
           <div className="search-container">
             <FaSearch className="search-icon" />
             <input

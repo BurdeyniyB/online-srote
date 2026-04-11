@@ -1,135 +1,120 @@
-.custom-dropdown {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    position: relative;
-    width: 100%;
-    min-width: 200px; 
-  }
-  
-  .custom-dropdown .dropdown-toggle {
-    width: 100%;
-    background-color: white !important;
-    color: black !important;
-    border: none;
-    border-bottom: 2px solid #ccc;
-    text-align: left;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 14px;
-    border-radius: 0;
-    font-size: 16px;
-  }
-  
-  .custom-dropdown .dropdown-toggle::after {
-    content: "▼";
-    font-size: 12px;
-    margin-left: auto;
-    transition: transform 0.3s ease-in-out;
-    display: inline-block;
-  }
-  
-  .custom-dropdown.show .dropdown-toggle::after {
-    transform: rotate(180deg);
-  }
-  
-  /* Меню не перекриває інші елементи */
-  .custom-dropdown .dropdown-menu {
-    width: 100%;
-    border: none;
-    border-bottom: 2px solid #ccc;
-    background-color: white;
-    box-shadow: none;
-    padding: 0;
-    display: block;
-    visibility: hidden;
-    opacity: 0;
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: opacity 0.9s ease-in-out, transform 0.9s ease-in-out;
-    position: static; /* Змінено з absolute */
-  }
-  
-  .custom-dropdown.show .dropdown-menu {
-    visibility: visible;
-    opacity: 1;
-    transform: scaleY(1);
-  }
-  
-  .custom-dropdown .dropdown-item {
-    color: black;
-    padding: 10px 14px;
-    font-size: 16px;
-  }
-  
-  .custom-dropdown .dropdown-item:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .dropdown-menu {
-    all: unset !important;
-    display: block;
- }
- 
- .custom-dropdown {
-  position: relative;
-  width: 100%;
+/* ===== FILTER SECTION (shared by DropBar & PriceFilter) ===== */
+.filter-section {
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.dropdown-toggle {
-  width: 100%;
-  padding: 10px 15px;
-  background-color: #f8f9fa;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  text-align: left;
-  cursor: pointer;
+.filter-section:last-child {
+  border-bottom: none;
 }
 
-.dropdown-menu {
-  position: absolute;
+.filter-section-toggle {
   width: 100%;
-  max-height: 200px;
-  overflow-y: auto;
-  background-color: white;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 100;
-}
-
-.dropdown-item {
+  background: none;
+  border: none;
+  padding: 14px 18px;
   display: flex;
   align-items: center;
-  padding: 8px 15px;
+  justify-content: space-between;
   cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 
-.dropdown-item:hover {
-  background-color: #e9ecef;
+.filter-section-toggle:hover {
+  background-color: #f9fafb;
 }
 
-.dropdown-item input {
-  margin-right: 10px;
+.filter-section-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #111;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.show .dropdown-menu {
-  display: block;
+.filter-section-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background-color: #f0a500;
+  color: #fff;
+  border-radius: 10px;
+  padding: 1px 6px;
+  line-height: 1.4;
 }
 
-/* Змінюємо колір позначення для чекбоксів та радіокнопок */
-.dropdown-item input[type="checkbox"]:checked,
-.dropdown-item input[type="radio"]:checked {
-  accent-color: rgb(51, 51, 51);
+.filter-section-arrow {
+  font-size: 0.75rem;
+  color: #6b7280;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
 }
 
-/* Стилі для всіх чекбоксів та радіокнопок */
-.dropdown-item input[type="checkbox"],
-.dropdown-item input[type="radio"] {
-  width: 16px;
-  height: 16px;
-  accent-color: rgb(51, 51, 51);
+.filter-section-arrow--open {
+  transform: rotate(180deg);
 }
 
+/* ===== COLLAPSIBLE BODY ===== */
+.filter-section-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+}
 
+.filter-section-body--open {
+  max-height: 400px;
+}
+
+.filter-items {
+  padding: 0 18px 12px;
+}
+
+/* ===== ITEMS ===== */
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.filter-item:hover .filter-item-label {
+  color: #f0a500;
+}
+
+.filter-item-label {
+  font-size: 0.875rem;
+  color: #374151;
+  transition: color 0.15s ease;
+  line-height: 1.3;
+}
+
+/* ===== CUSTOM CHECKBOX / RADIO ===== */
+.filter-checkbox {
+  width: 17px;
+  height: 17px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  background-color: #fff;
+}
+
+.filter-checkbox--radio {
+  border-radius: 50%;
+}
+
+.filter-checkbox--active {
+  border-color: #f0a500;
+  background-color: #f0a500;
+}
+
+.filter-checkbox-mark {
+  font-size: 10px;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1;
+}
