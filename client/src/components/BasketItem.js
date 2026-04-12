@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Card, Image, Button } from "react-bootstrap";
+import { useContext, useEffect, useState, useRef } from "react";
+import { Image } from "react-bootstrap";
 import { Context } from "..";
 import { destroyDeviceFromBasket } from "../http/basketAPI";
-import { FaTimes, FaMinus, FaPlus } from "react-icons/fa";
+import { FaMinus, FaPlus, FaEllipsisV } from "react-icons/fa";
 import "../style/BasketItem.css";
 import { fetchDevices } from "../http/deviceAPI";
 
@@ -10,6 +10,8 @@ const BasketItem = ({ basketItem }) => {
   const { user, device, basket } = useContext(Context);
   const [quantity, setQuantity] = useState(basketItem.quantity);
   const [userDevice, setUserDevice] = useState();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
   useEffect(() => {
     fetchDevices(
@@ -28,20 +30,28 @@ const BasketItem = ({ basketItem }) => {
     });
   }, []);
 
-  console.log("Device: " + JSON.stringify(device.devices));
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   if (!userDevice) {
     return <div className="basket-item">Device not found</div>;
   }
 
   const handleRemove = async () => {
+    setMenuOpen(false);
     try {
       basket.removeBasketDevice(basketItem.deviceId);
       await destroyDeviceFromBasket({
         userId: user.user.id,
         deviceId: basketItem.deviceId,
       });
-      console.log("Product was removed");
     } catch (error) {
       console.log("Failed to remove device from basket:", error);
     }
@@ -57,43 +67,48 @@ const BasketItem = ({ basketItem }) => {
   };
 
   return (
-    <Card className="basket-card">
-      <div className="basket-content">
-        <Image
-          src={Array.isArray(userDevice.img) ? userDevice.img[0] : userDevice.img}
-          rounded
-          alt={userDevice.name}
-          className="basket-image"
-        />
-          <div className="basket-name">{userDevice.name.split(',')[0]}</div>
-          <div className="quantity-control">
-            <button
-              className="quantity-btn"
-              onClick={() => handleQuantityChange(basketItem.quantity - 1)}
-            >
-              <FaMinus />
-            </button>
-            <input
-              type="number"
-              value={quantity}
-              onChange={(e) =>
-                handleQuantityChange(parseInt(e.target.value) || 1)
-              }
-              min="1"
-            />
-            <button
-              className="quantity-btn"
-              onClick={() => handleQuantityChange(basketItem.quantity + 1)}
-            >
-              <FaPlus />
-            </button>
-          </div>
-        <div className="basket-price">{userDevice.price} $</div>
-        <button onClick={handleRemove} className="basket-remove-btn">
-          <FaTimes />
+    <div className="basket-row">
+      <Image
+        src={Array.isArray(userDevice.img) ? userDevice.img[0] : userDevice.img}
+        alt={userDevice.name}
+        className="basket-image"
+      />
+      <div className="basket-info">
+        <div className="basket-name">{userDevice.name.split(",")[0]}</div>
+        {userDevice.brand?.name && (
+          <div className="basket-seller">Seller: {userDevice.brand.name}</div>
+        )}
+      </div>
+      <div className="quantity-control">
+        <button
+          className="quantity-btn"
+          onClick={() => handleQuantityChange(quantity - 1)}
+        >
+          <FaMinus />
+        </button>
+        <span className="quantity-value">{quantity}</span>
+        <button
+          className="quantity-btn"
+          onClick={() => handleQuantityChange(quantity + 1)}
+        >
+          <FaPlus />
         </button>
       </div>
-    </Card>
+      <div className="basket-price">{userDevice.price} ₴</div>
+      <div className="basket-menu" ref={menuRef}>
+        <button
+          className="kebab-btn"
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          <FaEllipsisV />
+        </button>
+        {menuOpen && (
+          <div className="kebab-dropdown">
+            <button onClick={handleRemove}>Remove</button>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

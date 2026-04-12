@@ -25,7 +25,10 @@ import Filter from "./Filter";
 
 const NavBar = observer(() => {
   const { user, device, basket } = useContext(Context);
-  const basketCount = basket.basketDevices.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const basketCount = basket.basketDevices.reduce(
+    (sum, item) => sum + (item.quantity || 1),
+    0,
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [timer, setTimer] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -56,7 +59,7 @@ const NavBar = observer(() => {
       <div className="navbar">
         <div className="navbar-container">
           <div className="mainLink" onClick={() => navigate(INDEX_ROUTE)}>
-            Online<span className="mainLink-accent">.Store</span>
+            Tech<span className="mainLink-accent">.Hub</span>
           </div>
           <div className="search-container">
             <FaSearch className="search-icon" />
