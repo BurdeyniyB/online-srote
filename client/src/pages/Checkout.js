@@ -1,9 +1,31 @@
 import { useState, useContext, Fragment } from "react";
 import { Container } from "react-bootstrap";
 import { observer } from "mobx-react-lite";
+import { useNavigate } from "react-router-dom";
 import { FaMapMarkerAlt, FaTruck, FaCreditCard } from "react-icons/fa";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardNumberElement,
+  CardExpiryElement,
+  CardCvcElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
 import { Context } from "..";
+import { createPaymentIntent } from "../http/paymentAPI";
+import { createOrder } from "../http/orderAPI";
 import "../style/Checkout.css";
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+
+const STRIPE_STYLE = {
+  base: {
+    fontSize: "14px",
+    color: "#333",
+    "::placeholder": { color: "#bbb" },
+  },
+};
 
 const MOCK_ADDRESSES = [
   {
@@ -37,18 +59,118 @@ const STEP_META = [
   { num: 3, label: "Payment", Icon: FaCreditCard },
 ];
 
+// ── Credit Card form (must be inside <Elements>) ──────────────────────────────
+const CreditCardSection = ({ total, basketItems, userId, onBack }) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const navigate = useNavigate();
+  const [cardholderName, setCardholderName] = useState("");
+  const [sameAsBilling, setSameAsBilling] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handlePay = async () => {
+    if (!stripe || !elements) return;
+    setLoading(true);
+    setErrorMsg("");
+    try {
+      const { clientSecret } = await createPaymentIntent(Math.round(total * 100));
+      const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardNumberElement),
+          billing_details: { name: cardholderName },
+        },
+      });
+      if (error) {
+        setErrorMsg(error.message);
+      } else if (paymentIntent?.status === "succeeded") {
+        await createOrder({
+          userId,
+          devices: basketItems.map((d) => ({ deviceId: d.id, quantity: d.quantity })),
+          payment: "credit_card",
+        });
+        navigate("/");
+      }
+    } catch {
+      setErrorMsg("Payment failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      {/* Card visual */}
+      <div className="checkout-card-visual">
+        <div className="checkout-card-top">
+          <div className="checkout-card-chip">
+            <div className="chip-body" />
+            <div className="chip-wave" />
+          </div>
+        </div>
+        <div className="checkout-card-number">4085  9536  8475  9530</div>
+        <div className="checkout-card-bottom">
+          <span className="checkout-card-holder">{cardholderName || "Cardholder"}</span>
+          <div className="checkout-card-logo">
+            <span className="mc-circle mc-red" />
+            <span className="mc-circle mc-yellow" />
+          </div>
+        </div>
+      </div>
+
+      <input
+        className="checkout-input"
+        placeholder="Cardholder Name"
+        value={cardholderName}
+        onChange={(e) => setCardholderName(e.target.value)}
+      />
+
+      <div className="checkout-stripe-element">
+        <CardNumberElement options={{ style: STRIPE_STYLE }} />
+      </div>
+
+      <div className="checkout-input-row">
+        <div className="checkout-stripe-element">
+          <CardExpiryElement options={{ style: STRIPE_STYLE }} />
+        </div>
+        <div className="checkout-stripe-element">
+          <CardCvcElement options={{ style: STRIPE_STYLE }} />
+        </div>
+      </div>
+
+      <label className="checkout-billing-check">
+        <input
+          type="checkbox"
+          checked={sameAsBilling}
+          onChange={(e) => setSameAsBilling(e.target.checked)}
+        />
+        Same as billing address
+      </label>
+
+      {errorMsg && <div className="checkout-error">{errorMsg}</div>}
+
+      <div className="checkout-actions">
+        <button className="checkout-btn-back" onClick={onBack}>Back</button>
+        <button
+          className="checkout-btn-pay"
+          onClick={handlePay}
+          disabled={loading || !stripe}
+        >
+          {loading ? "Processing..." : "Pay"}
+        </button>
+      </div>
+    </>
+  );
+};
+
+// ── Main Checkout ─────────────────────────────────────────────────────────────
 const Checkout = observer(() => {
-  const { basket, device } = useContext(Context);
+  const { basket, device, user } = useContext(Context);
 
   const [step, setStep] = useState(1);
   const [selectedAddress, setSelectedAddress] = useState(1);
   const [selectedShipping, setSelectedShipping] = useState("free");
   const [paymentTab, setPaymentTab] = useState("credit");
-  const [cardholderName, setCardholderName] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expDate, setExpDate] = useState("");
-  const [cvv, setCvv] = useState("");
-  const [sameAsBilling, setSameAsBilling] = useState(true);
   const [paypalEmail, setPaypalEmail] = useState("");
 
   const basketItems = basket.basketDevices
@@ -274,65 +396,14 @@ const Checkout = observer(() => {
             </div>
 
             {paymentTab === "credit" && (
-              <>
-                {/* Card visual */}
-                <div className="checkout-card-visual">
-                  <div className="checkout-card-top">
-                    <div className="checkout-card-chip">
-                      <div className="chip-body" />
-                      <div className="chip-wave" />
-                    </div>
-                  </div>
-                  <div className="checkout-card-number">
-                    {cardNumber
-                      ? cardNumber.replace(/(.{4})/g, "$1 ").trim().padEnd(19, " ")
-                      : "4085  9536  8475  9530"}
-                  </div>
-                  <div className="checkout-card-bottom">
-                    <span className="checkout-card-holder">{cardholderName || "Cardholder"}</span>
-                    <div className="checkout-card-logo">
-                      <span className="mc-circle mc-red" />
-                      <span className="mc-circle mc-yellow" />
-                    </div>
-                  </div>
-                </div>
-
-                <input
-                  className="checkout-input"
-                  placeholder="Cardholder Name"
-                  value={cardholderName}
-                  onChange={(e) => setCardholderName(e.target.value)}
+              <Elements stripe={stripePromise}>
+                <CreditCardSection
+                  total={total}
+                  basketItems={basketItems}
+                  userId={user.user.id}
+                  onBack={() => setStep(2)}
                 />
-                <input
-                  className="checkout-input"
-                  placeholder="Card Number"
-                  value={cardNumber}
-                  onChange={(e) => setCardNumber(e.target.value.replace(/\D/g, "").slice(0, 16))}
-                />
-                <div className="checkout-input-row">
-                  <input
-                    className="checkout-input"
-                    placeholder="Exp. Date"
-                    value={expDate}
-                    onChange={(e) => setExpDate(e.target.value)}
-                  />
-                  <input
-                    className="checkout-input"
-                    placeholder="CVV"
-                    value={cvv}
-                    onChange={(e) => setCvv(e.target.value.replace(/\D/g, "").slice(0, 3))}
-                  />
-                </div>
-
-                <label className="checkout-billing-check">
-                  <input
-                    type="checkbox"
-                    checked={sameAsBilling}
-                    onChange={(e) => setSameAsBilling(e.target.checked)}
-                  />
-                  Same as billing address
-                </label>
-              </>
+              </Elements>
             )}
 
             {paymentTab === "paypal" && (
@@ -354,6 +425,9 @@ const Checkout = observer(() => {
                 <button className="checkout-btn-paypal">
                   <span className="paypal-pay">Pay</span><span className="paypal-pal">Pal</span> Checkout
                 </button>
+                <div className="checkout-actions">
+                  <button className="checkout-btn-back" onClick={() => setStep(2)}>Back</button>
+                </div>
               </div>
             )}
 
@@ -371,15 +445,11 @@ const Checkout = observer(() => {
                   Sign in to your PayPal account or apply for PayPal Credit to complete your purchase.
                 </p>
                 <button className="checkout-btn-paypal-credit">Apply for PayPal Credit</button>
+                <div className="checkout-actions">
+                  <button className="checkout-btn-back" onClick={() => setStep(2)}>Back</button>
+                </div>
               </div>
             )}
-
-            <div className="checkout-actions">
-              <button className="checkout-btn-back" onClick={() => setStep(2)}>
-                Back
-              </button>
-              <button className="checkout-btn-pay">Pay</button>
-            </div>
           </div>
         </div>
       )}

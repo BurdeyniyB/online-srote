@@ -467,6 +467,7 @@
   justify-content: space-between;
   position: relative;
   overflow: hidden;
+  margin: 0 auto;
 }
 
 .checkout-card-visual::before {
@@ -712,6 +713,33 @@
 
 .checkout-btn-paypal-credit:hover {
   background: #00256b;
+}
+
+/* ── Stripe elements ── */
+.checkout-stripe-element {
+  padding: 11px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.checkout-stripe-element:focus-within {
+  border-color: #999;
+}
+
+.checkout-input-row .checkout-stripe-element {
+  flex: 1;
+}
+
+/* ── Payment error ── */
+.checkout-error {
+  font-size: 0.84rem;
+  color: #c0392b;
+  background: #fdf0ef;
+  border: 1px solid #f5c6c3;
+  border-radius: 6px;
+  padding: 10px 14px;
 }
 
 /* ── Responsive ── */
