@@ -6,7 +6,9 @@ const router = new Router();
 
 router.post('/', orderController.create);
 router.get('/', authMiddleware, orderController.getAll);
-router.put('/', authMiddleware, orderController.updateStatus)
+router.put('/', authMiddleware, orderController.updateStatus);
+router.patch('/tracking', authMiddleware, orderController.updateTracking);
+router.patch('/notes', authMiddleware, orderController.updateNotes);
 router.delete('/:orderId', checkRole("ADMIN"), orderController.delete);
 
 module.exports = router;
