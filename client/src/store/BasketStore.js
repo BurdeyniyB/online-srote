@@ -35,6 +35,11 @@ export default class BasketStore {
     this.saveToLocalStorage();
   }
 
+  clearBasket() {
+    this._basketDevices = [];
+    localStorage.removeItem("basketDevices");
+  }
+
   get basketDevices() {
     return this._basketDevices;
   }

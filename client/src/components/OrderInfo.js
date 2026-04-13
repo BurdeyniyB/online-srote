@@ -8,11 +8,14 @@ const TAX = 50;
 const SHIPPING = 29;
 
 const OrderInfo = () => {
-  const { basket, device } = useContext(Context);
+  const { basket, device, order } = useContext(Context);
   const navigate = useNavigate();
   const [subtotal, setSubtotal] = useState(0);
   const [promoCode, setPromoCode] = useState("");
   const [bonusCard, setBonusCard] = useState("");
+
+  const contact = order.contactInfo;
+  const setField = (field) => (e) => order.setContactInfo({ [field]: e.target.value });
 
   useEffect(() => {
     let sum = 0;
@@ -52,6 +55,57 @@ const OrderInfo = () => {
           />
           <button className="order-apply-btn">Apply</button>
         </div>
+      </div>
+
+      <div className="order-summary-field">
+        <label className="order-summary-label">Phone Number</label>
+        <input
+          className="order-summary-input"
+          placeholder="+1 (555) 000-0000"
+          value={contact.phone}
+          onChange={setField("phone")}
+        />
+      </div>
+
+      <div className="order-summary-field">
+        <label className="order-summary-label">Email</label>
+        <input
+          className="order-summary-input"
+          type="email"
+          placeholder="you@example.com"
+          value={contact.email}
+          onChange={setField("email")}
+        />
+      </div>
+
+      <div className="order-summary-field">
+        <label className="order-summary-label">Country</label>
+        <input
+          className="order-summary-input"
+          placeholder="United States"
+          value={contact.country}
+          onChange={setField("country")}
+        />
+      </div>
+
+      <div className="order-summary-field">
+        <label className="order-summary-label">State / Province</label>
+        <input
+          className="order-summary-input"
+          placeholder="California"
+          value={contact.stateProvince}
+          onChange={setField("stateProvince")}
+        />
+      </div>
+
+      <div className="order-summary-field">
+        <label className="order-summary-label">ZIP / Postal Code</label>
+        <input
+          className="order-summary-input"
+          placeholder="90210"
+          value={contact.zipPostalCode}
+          onChange={setField("zipPostalCode")}
+        />
       </div>
 
       <div className="order-summary-divider" />

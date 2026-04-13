@@ -4,7 +4,7 @@ const checkRole = require('../middleware/checkRoleMiddleware');
 const authMiddleware = require('../middleware/authMiddleware');
 const router = new Router();
 
-router.post('/', authMiddleware, orderController.create);
+router.post('/', orderController.create);
 router.get('/', authMiddleware, orderController.getAll);
 router.put('/', authMiddleware, orderController.updateStatus)
 router.delete('/:orderId', checkRole("ADMIN"), orderController.delete);

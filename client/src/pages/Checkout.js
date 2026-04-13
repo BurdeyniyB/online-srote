@@ -64,6 +64,7 @@ const CreditCardSection = ({ total, basketItems, userId, onBack }) => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
+  const { order, basket } = useContext(Context);
   const [cardholderName, setCardholderName] = useState("");
   const [sameAsBilling, setSameAsBilling] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -84,11 +85,18 @@ const CreditCardSection = ({ total, basketItems, userId, onBack }) => {
       if (error) {
         setErrorMsg(error.message);
       } else if (paymentIntent?.status === "succeeded") {
+        const { phone, email, country, stateProvince, zipPostalCode } = order.contactInfo;
         await createOrder({
           userId,
           devices: basketItems.map((d) => ({ deviceId: d.id, quantity: d.quantity })),
           payment: "credit_card",
+          phoneNumber: phone,
+          email,
+          country,
+          stateProvince,
+          zipPostalCode,
         });
+        basket.clearBasket();
         navigate("/");
       }
     } catch {
