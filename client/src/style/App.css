@@ -180,6 +180,12 @@ body {
   color: #c62828;
 }
 
+.auth-submit-btn:hover {
+  color: #fff !important;
+  background-color: #f0a500 !important;
+  border-color: #f0a500 !important;
+}
+
 .basket-button {
   background-color: #111;
   border-color: #111;

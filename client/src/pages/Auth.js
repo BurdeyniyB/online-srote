@@ -74,8 +74,9 @@ const Auth = observer(() => {
               </div>
             )}
             <Button
-              className="mt-3"
-              variant={"outline-success"}
+              className="mt-3 auth-submit-btn"
+              variant="outline-warning"
+              style={{ color: "#f0a500", borderColor: "#f0a500" }}
               onClick={click}
             >
               {isLogin ? "Login" : "Registration"}

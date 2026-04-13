@@ -1,49 +1,38 @@
-/* Основні стилі для контейнера замовлення */
 .order-info-container {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-  margin-top: 50px
+  align-items: flex-start;
+  gap: 24px;
+  margin-top: 40px;
+  margin-bottom: 40px;
 }
 
-/* Стиль для блоків деталей замовлення */
+.basket-devices {
+  flex: 1.4;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  padding: 24px;
+}
+
+.basket-devices h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
 .order-details {
-  display: flex;
-  background-color: white;
-  padding: 20px;
-  margin-left: 50px;
   flex: 1;
-  max-width: 70%;
+  min-width: 280px;
 }
 
-/* Стиль для кнопки "Buy Now" */
-.order-button {
-  background-color: black;
-  padding: 15px;
-  border-radius: 5px;
-  flex-shrink: 0;
-  margin-left: 20px;
-}
-
-/* Медіа запит для малих екранів */
 @media (max-width: 768px) {
   .order-info-container {
     flex-direction: column;
-    align-items: flex-start;
+    margin-top: 24px;
   }
 
-  .basket-devices{
-    width: 100%;
-  }
-
+  .basket-devices,
   .order-details {
-    width: 100%;
-    max-width: 100%;
-    margin-left: 0;
-  }
-
-  .order-button {
-    margin-top: 10px;
     width: 100%;
   }
 }

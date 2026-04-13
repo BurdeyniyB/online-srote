@@ -1,120 +1,82 @@
-import React, { useContext, useEffect, useState } from "react";
-import "../style/OrderInfo.css"; // Підключаємо стилі
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../style/OrderInfo.css";
 import { Context } from "..";
-import { fetchBasket } from "../http/basketAPI";
-import CreditCardForm from "./payment/CreditCardForm";
+import { CHECKOUT_ROUTE } from "../utils/const";
+
+const TAX = 50;
+const SHIPPING = 29;
 
 const OrderInfo = () => {
   const { basket, device } = useContext(Context);
-  const [country, setCountry] = useState("");
-  const [stateProvince, setStateProvince] = useState("");
-  const [zipCode, setZipCode] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("credit_card");
-  const [total, setTotal] = useState(0);
-
-  const countries = ["USA", "Canada", "Germany", "France", "Ukraine"];
-  const statesProvinces = {
-    USA: ["California", "Texas", "New York"],
-    Canada: ["Ontario", "Quebec"],
-    Germany: ["Berlin", "Bavaria"],
-    France: ["Paris", "Lyon"],
-    Ukraine: ["Kyiv", "Lviv"],
-  };
-
-  const paymentMethods = [
-    { label: "Credit Card", value: "credit_card" },
-    { label: "PayPal", value: "paypal" },
-    { label: "Bank Transfer", value: "bank_transfer" },
-  ];
-
-  const handlePayment = (data) => {
-    console.log("Processing payment with:", data);
-    alert("Payment successful!");
-  };
+  const navigate = useNavigate();
+  const [subtotal, setSubtotal] = useState(0);
+  const [promoCode, setPromoCode] = useState("");
+  const [bonusCard, setBonusCard] = useState("");
 
   useEffect(() => {
-    let newTotal = 0;
-  
+    let sum = 0;
     basket.basketDevices.forEach((deviceItem) => {
-      const foundDevice = device.devices.find((d) => d.id === deviceItem.deviceId);
-      if (foundDevice) {
-        newTotal += foundDevice.price * deviceItem.quantity;
+      const found = device.devices.find((d) => d.id === deviceItem.deviceId);
+      if (found) {
+        sum += found.price * deviceItem.quantity;
       }
     });
-  
-    setTotal(newTotal);
+    setSubtotal(sum);
   }, [basket.basketDevices, device.devices]);
-  
-  
+
+  const total = subtotal + TAX + SHIPPING;
 
   return (
-    <div className="order-info">
-      <input placeholder="Enter email" type="email" className="order-input" />
-      <input
-        placeholder="Enter phone number"
-        type="tel"
-        className="order-input"
-      />
+    <div className="order-summary">
+      <h5 className="order-summary-title">Order Summary</h5>
 
-      {/* Дропдаун вибору країни */}
-      <select
-        className="order-dropdown"
-        value={country}
-        onChange={(e) => setCountry(e.target.value)}
-      >
-        <option value="">Select Country</option>
-        {countries.map((c) => (
-          <option key={c} value={c}>
-            {c}
-          </option>
-        ))}
-      </select>
-
-      {/* Дропдаун вибору штату/провінції (залежить від країни) */}
-      <select
-        className="order-dropdown"
-        value={stateProvince}
-        onChange={(e) => setStateProvince(e.target.value)}
-        disabled={!country}
-      >
-        <option value="">Select State/Province</option>
-        {country &&
-          statesProvinces[country]?.map((state) => (
-            <option key={state} value={state}>
-              {state}
-            </option>
-          ))}
-      </select>
-
-      <input
-        placeholder="Enter ZIP Code"
-        type="text"
-        className="order-input"
-        value={zipCode}
-        onChange={(e) => setZipCode(e.target.value)}
-      />
-      
-      <div className="order-total">Total: ${total.toFixed(2)}</div>
-
-      {/* Вибір методу оплати */}
-      <div className="order-payment">
-        {paymentMethods.map((method) => (
-          <label key={method.value} className="payment-label">
-            <input
-              type="radio"
-              name="payment"
-              value={method.value}
-              checked={paymentMethod === method.value}
-              onChange={() => setPaymentMethod(method.value)}
-            />
-            {method.label}
-          </label>
-        ))}
+      <div className="order-summary-field">
+        <label className="order-summary-label">Discount code / Promo code</label>
+        <input
+          className="order-summary-input"
+          placeholder="Code"
+          value={promoCode}
+          onChange={(e) => setPromoCode(e.target.value)}
+        />
       </div>
 
-      {paymentMethod === "credit_card" && (
-        <CreditCardForm onSubmit={handlePayment} />
-      )}
+      <div className="order-summary-field">
+        <label className="order-summary-label">Your bonus card number</label>
+        <div className="order-bonus-row">
+          <input
+            className="order-summary-input order-bonus-input"
+            placeholder="Enter Card Number"
+            value={bonusCard}
+            onChange={(e) => setBonusCard(e.target.value)}
+          />
+          <button className="order-apply-btn">Apply</button>
+        </div>
+      </div>
+
+      <div className="order-summary-divider" />
+
+      <div className="order-summary-row">
+        <span>Subtotal</span>
+        <span>${subtotal.toFixed(2)}</span>
+      </div>
+      <div className="order-summary-row">
+        <span>Estimated Tax</span>
+        <span>${TAX}</span>
+      </div>
+      <div className="order-summary-row">
+        <span>Estimated shipping &amp; Handling</span>
+        <span>${SHIPPING}</span>
+      </div>
+
+      <div className="order-summary-divider" />
+
+      <div className="order-summary-row order-summary-total">
+        <span>Total</span>
+        <span>${total.toFixed(2)}</span>
+      </div>
+
+      <button className="order-checkout-btn" onClick={() => navigate(CHECKOUT_ROUTE)}>Checkout</button>
     </div>
   );
 };
