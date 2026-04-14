@@ -112,7 +112,7 @@ body {
 }
 
 .star-filled {
-  color: #f0a500;
+  color: #ffa500;
 }
 
 .star-empty {
@@ -183,28 +183,28 @@ body {
 
 .auth-submit-btn:hover {
   color: #fff !important;
-  background-color: #f0a500 !important;
-  border-color: #f0a500 !important;
+  background-color: #ffa500 !important;
+  border-color: #ffa500 !important;
 }
 
 .basket-button {
-  background-color: #111;
-  border-color: #111;
-  transition: all 0.3s ease;
+  background-color: #1a1d2e;
+  border-color: #1a1d2e;
+  transition: all 0.25s ease;
 }
 
 .basket-button:hover {
-  background-color: #c9c9c9;
-  border-color: #c9c9c9;
+  background-color: #ffa500;
+  border-color: #ffa500;
 }
 
 .basket-button svg {
   color: white;
-  transition: color 0.3s ease;
+  transition: color 0.25s ease;
 }
 
 .basket-button:hover svg {
-  color: black;
+  color: #fff;
 }
 
 .currency {

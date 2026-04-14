@@ -1,9 +1,11 @@
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
 }
 
-#root, .app-container {
+#root,
+.app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -15,14 +17,14 @@ html, body {
 
 /* ===== FOOTER ===== */
 .footer {
-  background-color: #1a1a1a;
+  background-color: #1a1d2e;
   width: 100%;
   margin-top: auto;
 }
 
 .footer-top {
   padding: 50px 0 30px;
-  border-bottom: 1px solid #2e2e2e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .footer-links-row {
@@ -59,13 +61,13 @@ html, body {
 }
 
 .footer-list a:hover {
-  color: #f0a500;
+  color: #ffa500;
 }
 
 /* ===== BOTTOM BAR ===== */
 .footer-bottom {
   padding: 20px 0;
-  background-color: #111;
+  background-color: #12152a;
 }
 
 .footer-bottom-inner {
@@ -85,7 +87,7 @@ html, body {
 }
 
 .footer-brand span {
-  color: #f0a500;
+  color: #ffa500;
 }
 
 .footer-brand:hover {
@@ -112,7 +114,7 @@ html, body {
 }
 
 .footer-socials a:hover {
-  color: #f0a500;
+  color: #ffa500;
 }
 
 /* ===== RESPONSIVE ===== */

@@ -1,7 +1,6 @@
 /* ===== NAVBAR ===== */
 .navbar {
-  background-color: #1a1a1a;
-
+  background-color: #1a1d2e;
   padding: 10px 24px;
   height: 60px;
   display: flex;
@@ -10,7 +9,8 @@
   position: sticky;
   top: 0;
   z-index: 500;
-  border-bottom: 1px solid #2e2e2e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 }
 
 .navbar-container {
@@ -35,7 +35,7 @@
 }
 
 .mainLink-accent {
-  color: #f0a500;
+  color: #ffa500;
 }
 
 .mainLink:hover {
@@ -70,8 +70,8 @@
 .search-input {
   width: 100%;
   padding: 8px 14px 8px 36px;
-  background-color: #2a2a2a;
-  border: 1px solid #3a3a3a;
+  background-color: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   color: #e5e7eb;
   font-size: 0.9rem;
@@ -82,12 +82,12 @@
 }
 
 .search-input::placeholder {
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .search-input:focus {
-  border-color: #f0a500;
-  background-color: #232323;
+  border-color: #ffa500;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* ===== DESKTOP ICON BUTTONS ===== */
@@ -117,7 +117,7 @@
 }
 
 .custom-button:hover {
-  color: #f0a500;
+  color: #ffa500;
   background-color: rgba(240, 165, 0, 0.1);
 }
 
@@ -136,7 +136,7 @@
 }
 
 .menu-button:hover {
-  color: #f0a500;
+  color: #ffa500;
 }
 
 /* ===== MOBILE SLIDE MENU ===== */
@@ -146,14 +146,14 @@
   right: -100%;
   width: min(320px, 100%);
   height: 100%;
-  background: #1a1a1a;
+  background: #1a1d2e;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   padding: 60px 24px 30px;
   transition: right 0.3s ease-in-out;
   z-index: 1000;
-  border-left: 1px solid #2e2e2e;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
   overflow-y: auto;
 }
 
@@ -176,7 +176,7 @@
 }
 
 .close-button:hover {
-  color: #f0a500;
+  color: #ffa500;
 }
 
 .mobile-menu-button {
@@ -188,12 +188,12 @@
   width: 100%;
   text-align: left;
   cursor: pointer;
-  border-bottom: 1px solid #2e2e2e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   transition: color 0.2s ease;
 }
 
 .mobile-menu-button:hover {
-  color: #f0a500;
+  color: #ffa500;
 }
 
 /* ===== BOTTOM NAV (mobile) ===== */
@@ -202,12 +202,12 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #1a1a1a;
+  background-color: #1a1d2e;
   display: none;
   justify-content: space-around;
   align-items: center;
   padding: 8px 0;
-  border-top: 1px solid #2e2e2e;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   z-index: 500;
 }
 
@@ -226,7 +226,7 @@
 }
 
 .mobile-button:hover {
-  color: #f0a500;
+  color: #ffa500;
 }
 
 /* ===== BASKET BADGE ===== */
@@ -241,8 +241,8 @@
   position: absolute;
   top: 2px;
   right: 2px;
-  background-color: #f0a500;
-  color: #1a1a1a;
+  background-color: #ffa500;
+  color: #1a1d2e;
   font-size: 10px;
   font-weight: 700;
   min-width: 16px;

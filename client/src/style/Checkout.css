@@ -37,7 +37,7 @@
 }
 
 .checkout-step.active .checkout-step-circle {
-  background: #111;
+  background: #1a1d2e;
   color: #fff;
 }
 
@@ -63,7 +63,7 @@
 
 .checkout-step.active .checkout-step-num,
 .checkout-step.active .checkout-step-label {
-  color: #111;
+  color: #1a1d2e;
 }
 
 .checkout-step-label {
@@ -104,14 +104,14 @@
 }
 
 .checkout-address-card.selected {
-  border-color: #111;
+  border-color: #ffa500;
   background: #fff;
 }
 
 .checkout-radio {
   margin-top: 3px;
   cursor: pointer;
-  accent-color: #111;
+  accent-color: #ffa500;
   flex-shrink: 0;
 }
 
@@ -141,7 +141,7 @@
 }
 
 .badge-home {
-  background: #111;
+  background: #1a1d2e;
   color: #fff;
 }
 
@@ -220,7 +220,7 @@
 
 .checkout-add-circle:hover {
   border-color: #555;
-  color: #111;
+  color: #1a1d2e;
 }
 
 .checkout-add-text {
@@ -248,7 +248,7 @@
 }
 
 .checkout-shipping-card.selected {
-  border-color: #111;
+  border-color: #ffa500;
   background: #fff;
 }
 
@@ -300,18 +300,19 @@
 .checkout-btn-next,
 .checkout-btn-pay {
   padding: 12px 32px;
-  background: #111;
+  background: #1a1d2e;
   color: #fff;
   border: none;
   border-radius: 6px;
   font-size: 0.92rem;
   font-weight: 500;
   cursor: pointer;
+  transition: background 0.2s;
 }
 
 .checkout-btn-next:hover,
 .checkout-btn-pay:hover {
-  background: #333;
+  background: #ffa500;
 }
 
 /* ── Payment step layout ── */
@@ -378,7 +379,7 @@
 .checkout-summary-price {
   font-size: 0.88rem;
   font-weight: 700;
-  color: #111;
+  color: #1a1d2e;
   white-space: nowrap;
 }
 
@@ -413,7 +414,7 @@
 .checkout-summary-total {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #111;
+  color: #1a1d2e;
 }
 
 /* ── Payment form panel ── */
@@ -448,14 +449,14 @@
 }
 
 .checkout-tab-btn.active {
-  color: #111;
-  border-bottom-color: #111;
+  color: #1a1d2e;
+  border-bottom-color: #ffa500;
   font-weight: 600;
 }
 
 /* ── Card visual ── */
 .checkout-card-visual {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 60%, #3a3a3a 100%);
+  background: linear-gradient(135deg, #1a1d2e 0%, #2d2d2d 60%, #3a3a3a 100%);
   border-radius: 12px;
   padding: 20px 24px 18px;
   color: #fff;
@@ -574,7 +575,7 @@
 }
 
 .checkout-input:focus {
-  border-color: #999;
+  border-color: #ffa500;
 }
 
 .checkout-input-row {
@@ -598,7 +599,7 @@
 .checkout-billing-check input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: #111;
+  accent-color: #ffa500;
   cursor: pointer;
 }
 
@@ -725,7 +726,7 @@
 }
 
 .checkout-stripe-element:focus-within {
-  border-color: #999;
+  border-color: #ffa500;
 }
 
 .checkout-input-row .checkout-stripe-element {

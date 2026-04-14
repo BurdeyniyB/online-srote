@@ -9,14 +9,16 @@
 .basket-devices {
   flex: 1.4;
   background: #fff;
-  border: 1px solid #e8e8e8;
-  border-radius: 4px;
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
   padding: 24px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 .basket-devices h2 {
   font-size: 1.3rem;
   font-weight: 700;
+  color: #1a1d2e;
   margin-bottom: 8px;
 }
 
