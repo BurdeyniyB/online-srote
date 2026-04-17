@@ -1,7 +1,8 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import PriceFilter from "./PriceFilter";
 import { Context } from "..";
 import DropBar from "./DropBar";
+import { fetchPriceRange } from "../http/deviceAPI";
 import { FaSlidersH, FaChevronDown } from "react-icons/fa";
 import "../style/Filter.css";
 
@@ -15,6 +16,11 @@ const RATING_OPTIONS = [
 const Filter = () => {
   const { device } = useContext(Context);
   const [statusOpen, setStatusOpen] = useState(true);
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 50000 });
+
+  useEffect(() => {
+    fetchPriceRange().then(setPriceRange);
+  }, []);
 
   const handlePriceChange = ({ min, max }) => {
     device.setMinPrice(min);
@@ -32,7 +38,7 @@ const Filter = () => {
         <span>Filters</span>
       </div>
 
-      <PriceFilter min={0} max={50000} onPriceChange={handlePriceChange} />
+      <PriceFilter key={`${priceRange.min}-${priceRange.max}`} min={priceRange.min} max={priceRange.max} onPriceChange={handlePriceChange} />
 
       <DropBar
         name="Sort by"

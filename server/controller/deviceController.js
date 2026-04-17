@@ -1,5 +1,6 @@
 const uuid = require("uuid");
 const path = require("path");
+const sequelize = require("../db");
 const { Device, DeviceInfo } = require("../models/models");
 const ApiError = require("../error/ApiError");
 const { Op, literal } = require("sequelize");
@@ -118,6 +119,21 @@ class DeviceController {
       });
 
       return res.json(devices);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+
+  async getPriceRange(req, res) {
+    try {
+      const result = await Device.findOne({
+        attributes: [
+          [sequelize.fn("MIN", sequelize.col("price")), "min"],
+          [sequelize.fn("MAX", sequelize.col("price")), "max"],
+        ],
+        raw: true,
+      });
+      return res.json({ min: Number(result.min) || 0, max: Number(result.max) || 50000 });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }

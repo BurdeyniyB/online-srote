@@ -33,6 +33,11 @@ export const fetchDevices = async (typeId, brandId, minPrice, maxPrice, sortBy, 
 };
 
 
+export const fetchPriceRange = async () => {
+  const { data } = await $host.get("api/device/price-range");
+  return data;
+};
+
 export const fetchOneDevice = async (id) => {
   const { data } = await $host.get("api/device/" + id);
   return data;
