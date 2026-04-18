@@ -22,11 +22,12 @@ A full-stack e-commerce application built with React, Node.js/Express, PostgreSQ
 
 ## Project Overview
 
-An online store with product catalog, shopping cart, user authentication, checkout with Stripe and PayPal payments, and an admin panel for managing products and orders.
+An online store with product catalog, shopping cart, user authentication, checkout with Stripe and PayPal payments, an AI-powered shopping assistant, and an admin panel for managing products and orders.
 
 **Key features:**
 
 - Browse and filter products by category, brand, price, rating, stock status, and sales
+- **AI chat assistant** — describe what you need in natural language and the catalog filters automatically (powered by OpenAI `gpt-4o-mini`)
 - Shopping basket with quantity management
 - JWT-based user authentication (registration / login)
 - Checkout with Stripe credit card payment
@@ -48,6 +49,7 @@ An online store with product catalog, shopping cart, user authentication, checko
 | Database | PostgreSQL + Sequelize ORM                         |
 | Auth     | JSON Web Tokens (JWT) + bcrypt                     |
 | Payments | Stripe, PayPal (`@paypal/react-paypal-js`)         |
+| AI       | OpenAI API (`gpt-4o-mini`) via `openai` npm package |
 | DevOps   | Docker, Docker Compose                             |
 
 ---
@@ -58,6 +60,7 @@ An online store with product catalog, shopping cart, user authentication, checko
 - **PostgreSQL** 14+ (or use Docker — see below)
 - **Stripe account** for payment keys (free test account is sufficient)
 - **PayPal Developer account** for PayPal sandbox keys (free — see [PayPal testing](#paypal-testing))
+- **OpenAI account** with an API key for the AI chat assistant (get one at [platform.openai.com](https://platform.openai.com))
 
 ---
 
@@ -107,6 +110,9 @@ PAYPAL_SECRET=EX...
 
 # PayPal API base URL — use sandbox for development, live for production
 PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com
+
+# OpenAI API key — get it from https://platform.openai.com/api-keys
+OPENAI_API_KEY=sk-...
 ```
 
 > **Where to get Stripe keys:**
@@ -198,6 +204,7 @@ DB_NAME=online_store
 PORT=8081
 SECRET_KEY=your_secret_key_here
 STRIPE_SECRET_KEY=sk_test_...
+OPENAI_API_KEY=sk-...
 ```
 
 ### 2. Build and start all containers
@@ -252,6 +259,7 @@ online-srote/
 │   ├── public/
 │   └── src/
 │       ├── components/             # Reusable UI components
+│       │   ├── AiChat.js           # Floating AI assistant chat panel
 │       │   ├── payment/            # Stripe payment form components
 │       │   └── models/             # Modal dialogs (add device, type, brand)
 │       ├── pages/                  # Route-level page components
@@ -282,6 +290,7 @@ online-srote/
 │   │   └── models.js               # Sequelize model definitions
 │   ├── routes/                     # Express route handlers
 │   │   ├── index.js                # Route aggregator (/api prefix)
+│   │   ├── aiRouter.js             # AI search endpoint (OpenAI)
 │   │   ├── userRouter.js
 │   │   ├── deviceRouter.js
 │   │   ├── typeRouter.js
@@ -371,6 +380,30 @@ All routes are prefixed with `/api`.
 | POST   | `/create-intent`           | —    | Create Stripe PaymentIntent, returns `client_secret` |
 | POST   | `/paypal-order`            | —    | Create PayPal order, returns `{ id }`                |
 | POST   | `/paypal-capture/:orderID` | —    | Capture an approved PayPal order                     |
+
+### AI — `/api/ai`
+
+| Method | Path      | Auth | Description                                                                   |
+| ------ | --------- | ---- | ----------------------------------------------------------------------------- |
+| POST   | `/search` | —    | Accepts `{ message, types, brands }`, returns structured filter params as JSON |
+
+The response shape:
+
+```json
+{
+  "search": "gaming laptop",
+  "minPrice": 500,
+  "maxPrice": 1200,
+  "typeIds": [3],
+  "brandIds": [1, 7],
+  "minRating": 4,
+  "inStockOnly": true,
+  "onSaleOnly": false,
+  "summary": "Showing gaming laptops between $500–$1200 with rating ≥ 4, in stock."
+}
+```
+
+Only fields relevant to the user's description are included. The frontend `AiChat` component applies these directly to the MobX `DeviceStore`.
 
 ---
 
