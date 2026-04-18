@@ -1,4 +1,4 @@
-# Online Store — Full-Stack E-Commerce Platform
+# Tech.Hub — Full-Stack E-Commerce Platform
 
 A full-stack e-commerce application built with React, Node.js/Express, PostgreSQL, and Stripe payments.
 
@@ -15,19 +15,24 @@ A full-stack e-commerce application built with React, Node.js/Express, PostgreSQ
 - [Database Migrations](#database-migrations)
 - [Project Structure](#project-structure)
 - [API Overview](#api-overview)
+- [PayPal Testing](#paypal-testing)
 - [Admin Access](#admin-access)
 
 ---
 
 ## Project Overview
 
-An online store with product catalog, shopping cart, user authentication, checkout with Stripe payment, and an admin panel for managing products and orders.
+An online store with product catalog, shopping cart, user authentication, checkout with Stripe and PayPal payments, and an admin panel for managing products and orders.
 
 **Key features:**
+
 - Browse and filter products by category, brand, price, rating, stock status, and sales
 - Shopping basket with quantity management
 - JWT-based user authentication (registration / login)
 - Checkout with Stripe credit card payment
+- Checkout with PayPal and PayPal Credit
+- Saved delivery addresses (add, edit, delete)
+- Shipping method selection with automatic delivery date calculation
 - Order management with status tracking (confirmed / in transit / completed)
 - Admin panel for adding/editing products and viewing orders
 - Product image support (single or multiple images per device)
@@ -36,14 +41,14 @@ An online store with product catalog, shopping cart, user authentication, checko
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
+| Layer    | Technology                                         |
+| -------- | -------------------------------------------------- |
 | Frontend | React 19, MobX, React Router 7, Bootstrap 5, Axios |
-| Backend | Node.js, Express 4 |
-| Database | PostgreSQL + Sequelize ORM |
-| Auth | JSON Web Tokens (JWT) + bcrypt |
-| Payments | Stripe |
-| DevOps | Docker, Docker Compose |
+| Backend  | Node.js, Express 4                                 |
+| Database | PostgreSQL + Sequelize ORM                         |
+| Auth     | JSON Web Tokens (JWT) + bcrypt                     |
+| Payments | Stripe, PayPal (`@paypal/react-paypal-js`)         |
+| DevOps   | Docker, Docker Compose                             |
 
 ---
 
@@ -52,6 +57,7 @@ An online store with product catalog, shopping cart, user authentication, checko
 - **Node.js** v18+ and npm
 - **PostgreSQL** 14+ (or use Docker — see below)
 - **Stripe account** for payment keys (free test account is sufficient)
+- **PayPal Developer account** for PayPal sandbox keys (free — see [PayPal testing](#paypal-testing))
 
 ---
 
@@ -67,6 +73,9 @@ REACT_APP_API_URL=http://localhost:3000
 
 # Stripe public key — get it from https://dashboard.stripe.com/test/apikeys
 REACT_APP_STRIPE_PUBLIC_KEY=pk_test_...
+
+# PayPal Client ID — get it from https://developer.paypal.com (Sandbox app)
+REACT_APP_PAYPAL_CLIENT_ID=AX...
 ```
 
 > `REACT_APP_*` variables are embedded at build time by Create React App.
@@ -91,9 +100,17 @@ SECRET_KEY=your_secret_key_here
 
 # Stripe secret key — get it from https://dashboard.stripe.com/test/apikeys
 STRIPE_SECRET_KEY=sk_test_...
+
+# PayPal Sandbox credentials — get them from https://developer.paypal.com
+PAYPAL_CLIENT_ID=AX...
+PAYPAL_SECRET=EX...
+
+# PayPal API base URL — use sandbox for development, live for production
+PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com
 ```
 
 > **Where to get Stripe keys:**
+>
 > 1. Create a free account at [stripe.com](https://stripe.com)
 > 2. Go to **Developers → API keys**
 > 3. Copy **Publishable key** → `REACT_APP_STRIPE_PUBLIC_KEY`
@@ -191,11 +208,11 @@ docker-compose up --build
 
 This starts three containers:
 
-| Container | Port | Description |
-|---|---|---|
-| `online_store_db` | 5432 | PostgreSQL database |
-| `online_store_server` | 8081 | Express API server |
-| `online_store_client` | 3000 | React frontend |
+| Container             | Port | Description         |
+| --------------------- | ---- | ------------------- |
+| `online_store_db`     | 5432 | PostgreSQL database |
+| `online_store_server` | 8081 | Express API server  |
+| `online_store_client` | 3000 | React frontend      |
 
 ### 3. Stop containers
 
@@ -296,53 +313,120 @@ All routes are prefixed with `/api`.
 
 ### Auth — `/api/user`
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| POST | `/registration` | — | Register a new user |
-| POST | `/login` | — | Login, returns JWT |
-| GET | `/auth` | JWT | Verify token, returns user info |
+| Method | Path            | Auth | Description                     |
+| ------ | --------------- | ---- | ------------------------------- |
+| POST   | `/registration` | —    | Register a new user             |
+| POST   | `/login`        | —    | Login, returns JWT              |
+| GET    | `/auth`         | JWT  | Verify token, returns user info |
 
 ### Devices — `/api/device`
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/` | — | List devices (filter by type, brand, price, page) |
-| GET | `/:id` | — | Get single device with specs |
-| POST | `/` | ADMIN | Create device |
-| PUT | `/:id` | ADMIN | Update device |
-| DELETE | `/:id` | ADMIN | Delete device |
+| Method | Path   | Auth  | Description                                       |
+| ------ | ------ | ----- | ------------------------------------------------- |
+| GET    | `/`    | —     | List devices (filter by type, brand, price, page) |
+| GET    | `/:id` | —     | Get single device with specs                      |
+| POST   | `/`    | ADMIN | Create device                                     |
+| PUT    | `/:id` | ADMIN | Update device                                     |
+| DELETE | `/:id` | ADMIN | Delete device                                     |
 
 ### Catalog — `/api/device/type`, `/api/device/brand`
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/type` | — | List all types |
-| POST | `/type` | ADMIN | Create type |
-| GET | `/brand` | — | List all brands |
-| POST | `/brand` | ADMIN | Create brand |
+| Method | Path     | Auth  | Description     |
+| ------ | -------- | ----- | --------------- |
+| GET    | `/type`  | —     | List all types  |
+| POST   | `/type`  | ADMIN | Create type     |
+| GET    | `/brand` | —     | List all brands |
+| POST   | `/brand` | ADMIN | Create brand    |
 
 ### Basket — `/api/basket`
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/` | JWT | Get user's basket |
-| POST | `/` | JWT | Add device to basket |
-| PUT | `/:id` | JWT | Update quantity |
-| DELETE | `/:id` | JWT | Remove item from basket |
+| Method | Path   | Auth | Description             |
+| ------ | ------ | ---- | ----------------------- |
+| GET    | `/`    | JWT  | Get user's basket       |
+| POST   | `/`    | JWT  | Add device to basket    |
+| PUT    | `/:id` | JWT  | Update quantity         |
+| DELETE | `/:id` | JWT  | Remove item from basket |
 
 ### Orders — `/api/order`
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| POST | `/` | JWT | Create order from basket |
-| GET | `/` | JWT | Get user's orders |
-| PUT | `/:id` | ADMIN | Update order status |
+| Method | Path   | Auth  | Description              |
+| ------ | ------ | ----- | ------------------------ |
+| POST   | `/`    | JWT   | Create order from basket |
+| GET    | `/`    | JWT   | Get user's orders        |
+| PUT    | `/:id` | ADMIN | Update order status      |
+
+### Addresses — `/api/address`
+
+| Method | Path   | Auth | Description                                  |
+| ------ | ------ | ---- | -------------------------------------------- |
+| GET    | `/`    | JWT  | Get all saved addresses for the current user |
+| POST   | `/`    | JWT  | Create a new address                         |
+| PUT    | `/:id` | JWT  | Update an existing address                   |
+| DELETE | `/:id` | JWT  | Delete an address                            |
 
 ### Payments — `/api/payment`
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| POST | `/create-intent` | JWT | Create Stripe PaymentIntent, returns client_secret |
+| Method | Path                       | Auth | Description                                          |
+| ------ | -------------------------- | ---- | ---------------------------------------------------- |
+| POST   | `/create-intent`           | —    | Create Stripe PaymentIntent, returns `client_secret` |
+| POST   | `/paypal-order`            | —    | Create PayPal order, returns `{ id }`                |
+| POST   | `/paypal-capture/:orderID` | —    | Capture an approved PayPal order                     |
+
+---
+
+## PayPal Testing
+
+PayPal uses a fully isolated **Sandbox** environment — no real money involved.
+
+### 1. Create a Developer account
+
+Go to [developer.paypal.com](https://developer.paypal.com) and sign up for free (or log in with an existing PayPal account).
+
+### 2. Create a Sandbox app
+
+1. In the dashboard open **Apps & Credentials**
+2. Make sure you are on the **Sandbox** tab
+3. Click **Create App**, give it any name
+4. Copy the **Client ID** → `REACT_APP_PAYPAL_CLIENT_ID` (client `.env`) and `PAYPAL_CLIENT_ID` (server `.env`)
+5. Click **Show** under Secret → copy to `PAYPAL_SECRET` (server `.env`)
+
+### 3. Configure environment variables
+
+**`client/.env`**
+
+```env
+REACT_APP_PAYPAL_CLIENT_ID=AX...   # Sandbox Client ID from step 2
+```
+
+**`server/.env`**
+
+```env
+PAYPAL_CLIENT_ID=AX...                              # same Sandbox Client ID
+PAYPAL_SECRET=EX...                                 # Sandbox Secret from step 2
+PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com    # sandbox endpoint
+```
+
+### 4. Get sandbox buyer credentials
+
+1. In the developer dashboard go to **Sandbox → Accounts**
+2. Find the auto-generated **Personal** account (buyer) — click its name to expand
+3. Note the **Email** and **Password** — use these to log in during checkout
+
+### 5. Test the flow
+
+1. Add items to the cart and proceed to checkout
+2. Select **PayPal** or **PayPal Credit** tab on the payment step
+3. Click the blue PayPal button — a popup opens
+4. Log in with the sandbox buyer credentials from step 4
+5. Approve the payment — the popup closes and the order is saved to the database
+
+### Going live
+
+When you are ready for production:
+
+1. In **Apps & Credentials** switch to the **Live** tab and create a Live app
+2. Replace keys in `.env` with the live credentials
+3. Change `PAYPAL_BASE_URL` to `https://api-m.paypal.com`
 
 ---
 

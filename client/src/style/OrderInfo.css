@@ -83,6 +83,31 @@
   color: #111;
 }
 
+.order-input-error {
+  border-color: #e74c3c !important;
+}
+
+.order-input-success {
+  border-color: #27ae60 !important;
+}
+
+.order-promo-error {
+  font-size: 0.78rem;
+  color: #e74c3c;
+  margin-top: 2px;
+}
+
+.order-promo-success {
+  font-size: 0.78rem;
+  color: #27ae60;
+  margin-top: 2px;
+}
+
+.order-summary-discount {
+  color: #27ae60;
+  font-weight: 500;
+}
+
 .order-checkout-btn {
   margin-top: 6px;
   background: #111;

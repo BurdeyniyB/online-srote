@@ -1,6 +1,12 @@
+const { randomBytes } = require("crypto");
 const { OrderDevice, Order, Device } = require("../models/models");
 const ApiError = require("../error/ApiError");
 const { Op } = require("sequelize");
+
+function generateOrderNumber() {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  return Array.from(randomBytes(8), (b) => chars[b % chars.length]).join("");
+}
 
 class OrderController {
   async create(req, res, next) {
@@ -17,6 +23,9 @@ class OrderController {
       addressLine,
       payment,
       deliveryMethod,
+      deliveryDate,
+      deliveryPriority,
+      paymentStatus,
       customerComment,
       total,
     } = req.body;
@@ -27,6 +36,7 @@ class OrderController {
 
     try {
       const order = await Order.create({
+        order_number: generateOrderNumber(),
         userId,
         phone_number: phoneNumber,
         email,
@@ -38,6 +48,9 @@ class OrderController {
         address_line: addressLine || null,
         payment,
         delivery_method: deliveryMethod || "standard",
+        delivery_date: deliveryDate || null,
+        delivery_priority: deliveryPriority || "standard",
+        payment_status: paymentStatus || "unpaid",
         customer_comment: customerComment || null,
         total: total || null,
         status_history: [

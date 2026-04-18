@@ -60,6 +60,7 @@ const DeviceInfo = sequelize.define("device_info", {
 
 const Order = sequelize.define("order", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  order_number: { type: DataTypes.STRING(8), unique: true, allowNull: true },
   phone_number: { type: DataTypes.STRING, allowNull: false },
   email: { type: DataTypes.STRING, allowNull: false },
   first_name: { type: DataTypes.STRING, allowNull: true },
@@ -70,6 +71,8 @@ const Order = sequelize.define("order", {
   address_line: { type: DataTypes.STRING, allowNull: true },
   payment: { type: DataTypes.STRING, allowNull: false },
   delivery_method: { type: DataTypes.STRING, defaultValue: "standard" },
+  delivery_date: { type: DataTypes.DATEONLY, allowNull: true },
+  delivery_priority: { type: DataTypes.STRING, defaultValue: "standard" },
   status: { type: DataTypes.STRING, defaultValue: "new" },
   payment_status: { type: DataTypes.STRING, defaultValue: "unpaid" },
   delivery_status: { type: DataTypes.STRING, defaultValue: "pending" },
@@ -86,7 +89,20 @@ const Order = sequelize.define("order", {
 
 const OrderDevice = sequelize.define("order_device", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  quantity: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 }, 
+  quantity: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 },
+});
+
+const Address = sequelize.define("address", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  label: { type: DataTypes.STRING, allowNull: false },
+  type: { type: DataTypes.STRING, defaultValue: "HOME" },
+  full_name: { type: DataTypes.STRING, allowNull: false },
+  address_line: { type: DataTypes.STRING, allowNull: false },
+  city: { type: DataTypes.STRING, allowNull: true },
+  state_province: { type: DataTypes.STRING, allowNull: true },
+  zip_postal_code: { type: DataTypes.STRING, allowNull: true },
+  country: { type: DataTypes.STRING, allowNull: false },
+  phone_number: { type: DataTypes.STRING, allowNull: false },
 });
 
 // 🔗 **Зв’язки**
@@ -123,6 +139,9 @@ OrderDevice.belongsTo(Device);
 User.hasMany(Order);
 Order.belongsTo(User);
 
+User.hasMany(Address);
+Address.belongsTo(User);
+
 module.exports = {
   User,
   Basket,
@@ -134,4 +153,5 @@ module.exports = {
   Brand,
   Order,
   OrderDevice,
+  Address,
 };

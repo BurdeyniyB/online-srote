@@ -276,6 +276,25 @@
   white-space: nowrap;
 }
 
+.checkout-date-input {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: #333;
+  outline: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkout-date-input:focus {
+  border-color: #ffa500;
+}
+
+.checkout-shipping-card.selected .checkout-date-input {
+  border-color: #ffa500;
+}
+
 /* ── Actions (Back / Next / Pay) ── */
 .checkout-actions {
   display: flex;
@@ -415,6 +434,11 @@
   font-size: 0.95rem;
   font-weight: 700;
   color: #1a1d2e;
+}
+
+.checkout-summary-discount {
+  color: #27ae60;
+  font-weight: 500;
 }
 
 /* ── Payment form panel ── */
@@ -741,6 +765,149 @@
   border: 1px solid #f5c6c3;
   border-radius: 6px;
   padding: 10px 14px;
+}
+
+.badge-other {
+  background: #888;
+  color: #fff;
+}
+
+/* ── Address Modal ── */
+.addr-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.addr-modal {
+  background: #fff;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.addr-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.addr-modal-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  color: #1a1d2e;
+}
+
+.addr-modal-close {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #888;
+  line-height: 1;
+  padding: 4px;
+}
+
+.addr-modal-close:hover {
+  color: #333;
+}
+
+.addr-modal-body {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.addr-modal-row {
+  display: flex;
+  gap: 12px;
+}
+
+.addr-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.addr-modal-field--sm {
+  flex: 0 0 120px;
+}
+
+.addr-modal-field label {
+  font-size: 0.78rem;
+  color: #555;
+}
+
+.addr-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* ── PayPal blue button + or divider slide-up animation ── */
+.paypal-blue-section {
+  width: 100%;
+  overflow: hidden;
+  max-height: 120px;
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease,
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.paypal-blue-section--hidden {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-14px);
+  pointer-events: none;
+}
+
+.paypal-or-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.paypal-or-divider span:first-child,
+.paypal-or-divider span:last-child {
+  flex: 1;
+  height: 1px;
+  background: #ccc;
+}
+
+.paypal-or-divider span:nth-child(2) {
+  font-size: 0.8rem;
+  color: #999;
+  white-space: nowrap;
+}
+
+.paypal-card-btn-wrap {
+  width: 100%;
+  transition: margin-top 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.paypal-card-btn-wrap--flush {
+  margin-top: -16px;
 }
 
 /* ── Responsive ── */
