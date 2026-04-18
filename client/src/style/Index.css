@@ -218,3 +218,109 @@
     color: white;
     border: 1px solid #fff;
 }
+
+/* Popular section */
+.popular-section {
+    background: linear-gradient(135deg, #1a1d2e 0%, #2a2d40 100%);
+    border-radius: 16px;
+    padding: 32px;
+    color: white;
+}
+
+.popular-section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.popular-section-title {
+    font-size: 32px;
+    font-weight: 800;
+    margin: 0 0 6px 0;
+}
+
+.popular-section-subtitle {
+    font-size: 14px;
+    color: #9ca3af;
+    margin: 0;
+}
+
+.popular-section-link {
+    background: none;
+    border: 1px solid #ffa500;
+    color: #ffa500;
+    font-size: 14px;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+}
+
+.popular-section-link:hover {
+    background-color: #ffa500;
+    color: #fff;
+}
+
+.popular-section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    align-items: start;
+    width: 100%;
+}
+
+/* Home page sections */
+.home-sections {
+    padding: 40px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.product-section {
+    padding: 0 20px;
+}
+
+.product-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.product-section-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.product-section-link {
+    background: none;
+    border: 1px solid #ffa500;
+    color: #ffa500;
+    font-size: 14px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.product-section-link:hover {
+    background-color: #ffa500;
+    color: #fff;
+}
+
+.product-section-scroll {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    align-items: start;
+    width: 100%;
+}
+
+.product-section-item .device-card {
+    width: 100%;
+    max-width: 100%;
+}

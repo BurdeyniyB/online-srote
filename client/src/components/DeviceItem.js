@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Button, Card, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { DEVICE_ROUTE } from "../utils/const";
@@ -65,7 +65,14 @@ const DeviceItem = observer(({ device }) => {
     <Card
       className="device-card"
       border="light"
-      onClick={() => navigate(DEVICE_ROUTE + "/" + device.id)}
+      onClick={() => {
+        try {
+          const stored = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
+          const updated = [device, ...stored.filter((d) => d.id !== device.id)].slice(0, 8);
+          localStorage.setItem("recentlyViewed", JSON.stringify(updated));
+        } catch (e) {}
+        navigate(DEVICE_ROUTE + "/" + device.id);
+      }}
     >
       <div className="image-container">
         <Image

@@ -5,7 +5,7 @@ import "../../style/Index.css";
 const Banners = () => {
   return (
     <div>
-      <div className="banner-container">
+      {/* <div className="banner-container">
         <div className="banner-text">
           <h6>Pro.Beyond.</h6>
           <h1>
@@ -17,8 +17,8 @@ const Banners = () => {
         <div className="banner-image">
           <img src="/images/Banner/Iphone.png" alt="iPhone 14 PRO" />
         </div>
-      </div>
-      <div className="products-container">
+      </div> */}
+      {/* <div className="products-container">
         <div className="left-products">
           <div className="product-block higher">
             <div className="product-block playstation">
@@ -68,7 +68,7 @@ const Banners = () => {
           </div>
           <img src="/images/Banner/MacbookAir.png" alt="Macbook Air" />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
