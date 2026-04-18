@@ -42,3 +42,8 @@ export const fetchOneDevice = async (id) => {
   const { data } = await $host.get("api/device/" + id);
   return data;
 };
+
+export const aiSearch = async (message, types, brands) => {
+  const { data } = await $host.post("api/ai/search", { message, types, brands });
+  return data;
+};

@@ -10,6 +10,7 @@ import "../style/App.css";
 import PriceFilter from "../components/PriceFilter";
 import { FaSearch } from "react-icons/fa";
 import Filter from "../components/Filter";
+import AiChat from "../components/AiChat";
 
 const Store = observer(() => {
   const { device } = useContext(Context);
@@ -100,6 +101,7 @@ const Store = observer(() => {
         </Col>
       </Row>
       <Pages onLoadMore={() => { appendNextFetch.current = true; }} />
+      <AiChat />
     </Container>
   );
 });
