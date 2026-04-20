@@ -26,6 +26,12 @@ body {
   width: 100%;
 }
 
+.store-col {
+  position: sticky;
+  top: 76px;
+  align-self: flex-start;
+}
+
 .custom-button {
   margin-right: 5px;
   margin-left: 5px;
@@ -280,10 +286,6 @@ body {
 
 .device-scroll-wrapper {
   width: 100%;
-  max-height: calc(100vh - 180px);
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding-right: 4px;
 }
 
 @media (max-width: 950px) {
