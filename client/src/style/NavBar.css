@@ -76,9 +76,7 @@
   color: #e5e7eb;
   font-size: 0.9rem;
   outline: none;
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .search-input::placeholder {

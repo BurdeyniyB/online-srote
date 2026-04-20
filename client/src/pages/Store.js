@@ -1,13 +1,10 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
-import DropBar from "../components/DropBar";
 import DeviceList from "../components/DeviceList";
 import { observer } from "mobx-react-lite";
 import { Context } from "..";
 import { fetchBrands, fetchDevices, fetchTypes } from "../http/deviceAPI";
 import Pages from "../components/Pages";
 import "../style/App.css";
-import PriceFilter from "../components/PriceFilter";
 import { FaSearch } from "react-icons/fa";
 import Filter from "../components/Filter";
 import AiChat from "../components/AiChat";
@@ -61,48 +58,91 @@ const Store = observer(() => {
     device.onSaleOnly,
   ]);
 
-  const handlePriceChange = ({ min, max }) => {
-    device.setMinPrice(min);
-    device.setMaxPrice(max);
-  };
-
   useEffect(() => {
-    if (timer) {
-      clearTimeout(timer);
-    }
-
-    const newTimer = window.setTimeout(() => {
-      device.setSearch(searchQuery);
-    }, 500);
-
+    if (timer) clearTimeout(timer);
+    const newTimer = window.setTimeout(() => device.setSearch(searchQuery), 500);
     setTimer(newTimer);
   }, [searchQuery]);
 
+  const hasActiveFilters =
+    device.selectedType.length > 0 ||
+    device.selectedBrand.length > 0 ||
+    device.inStockOnly ||
+    device.onSaleOnly ||
+    device.minRating;
+
   return (
-    <Container fluid className="store-container">
-      <div className="store-search-container">
-        <FaSearch className="store-search-icon" />
-        <input
-          type="search"
-          placeholder="Search..."
-          className="store-search-input"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
-      <Row>
-        <Col xs={12} md={3} className="store-col d-flex justify-content-center">
+    <div className="store-page">
+      <div className="store-body">
+        <aside className="store-filter-col">
           <Filter />
-        </Col>
-        <Col xs={12} md={9} className="d-flex device-col">
-          <div className="device-scroll-wrapper">
-            <DeviceList />
+        </aside>
+        <main className="store-main-col">
+
+          {/* Search */}
+          <div className="store-search-card">
+            <FaSearch className="store-search-card-icon" />
+            <input
+              type="search"
+              placeholder="Search products…"
+              className="store-search-card-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
-        </Col>
-      </Row>
-      <Pages onLoadMore={() => { appendNextFetch.current = true; }} />
+
+          {/* Active filter chips */}
+          <div className="store-results-bar">
+            {hasActiveFilters && (
+              <div className="store-chips">
+                {device.selectedType.map((t) => (
+                  <span key={t.id} className="store-chip">
+                    {t.name}
+                    <button onClick={() => device.setSelectedType(t)}>×</button>
+                  </span>
+                ))}
+                {device.selectedBrand.map((b) => (
+                  <span key={b.id} className="store-chip">
+                    {b.name}
+                    <button onClick={() => device.setSelectedBrand(b)}>×</button>
+                  </span>
+                ))}
+                {device.minRating && (
+                  <span className="store-chip">
+                    {device.minRating}★+
+                    <button onClick={() => device.setMinRating(null)}>×</button>
+                  </span>
+                )}
+                {device.inStockOnly && (
+                  <span className="store-chip">
+                    In Stock
+                    <button onClick={() => device.setInStockOnly(false)}>×</button>
+                  </span>
+                )}
+                {device.onSaleOnly && (
+                  <span className="store-chip">
+                    On Sale
+                    <button onClick={() => device.setOnSaleOnly(false)}>×</button>
+                  </span>
+                )}
+                <button className="store-chips-clear" onClick={() => device.clearFilters()}>
+                  Clear all
+                </button>
+              </div>
+            )}
+          </div>
+
+          <DeviceList />
+          <div className="store-results-footer">
+            <span className="store-results-count">
+              {device.totalCount.toLocaleString()} products
+            </span>
+          </div>
+          <Pages onLoadMore={() => { appendNextFetch.current = true; }} />
+        </main>
+      </div>
       <AiChat />
-    </Container>
+    </div>
   );
 });
 

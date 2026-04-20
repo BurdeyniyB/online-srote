@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ADMIN_ROUTE,
@@ -16,7 +16,6 @@ import {
   FaUser,
   FaHome,
   FaListUl,
-  FaSearch,
   FaBars,
   FaTimes,
 } from "react-icons/fa";
@@ -24,13 +23,11 @@ import "../style/NavBar.css";
 import Filter from "./Filter";
 
 const NavBar = observer(() => {
-  const { user, device, basket } = useContext(Context);
+  const { user, basket } = useContext(Context);
   const basketCount = basket.basketDevices.reduce(
     (sum, item) => sum + (item.quantity || 1),
     0,
   );
-  const [searchQuery, setSearchQuery] = useState("");
-  const [timer, setTimer] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -41,18 +38,6 @@ const NavBar = observer(() => {
     localStorage.removeItem("token");
   };
 
-  useEffect(() => {
-    if (timer) {
-      clearTimeout(timer);
-    }
-
-    const newTimer = window.setTimeout(() => {
-      device.setSearch(searchQuery);
-    }, 500);
-
-    setTimer(newTimer);
-  }, [searchQuery]);
-
   return (
     <>
       {/* Верхній навбар */}
@@ -60,16 +45,6 @@ const NavBar = observer(() => {
         <div className="navbar-container">
           <div className="mainLink" onClick={() => navigate(INDEX_ROUTE)}>
             Tech<span className="mainLink-accent">.Hub</span>
-          </div>
-          <div className="search-container">
-            <FaSearch className="search-icon" />
-            <input
-              type="search"
-              placeholder="Search..."
-              className="search-input"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
           </div>
           {/* Кнопки праворуч на великих екранах */}
           <div className="desktop-buttons">

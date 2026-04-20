@@ -107,6 +107,15 @@ export default class DeviceStore {
     this._totalCount = totalCount;
   }
 
+  clearFilters() {
+    this._selectedType = [];
+    this._selectedBrand = [];
+    this._inStockOnly = false;
+    this._onSaleOnly = false;
+    this._minRating = null;
+    this._page = 1;
+  }
+
   get types() {
     return this._types;
   }

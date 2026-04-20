@@ -17,19 +17,132 @@ body {
   flex-direction: column;
 }
 
-.store-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-self: center;
-  margin: 15px;
-  width: 100%;
+/* ── Store page layout ─────────────────────────────── */
+.store-page {
+  background: #f4f6f9;
+  min-height: calc(100vh - 60px);
 }
 
-.store-col {
+.store-body {
+  display: flex;
+  padding: 16px 20px;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.store-filter-col {
+  width: 240px;
+  min-width: 240px;
   position: sticky;
   top: 76px;
   align-self: flex-start;
+}
+
+.store-main-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.store-search-card {
+  background: #fff;
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.store-search-card-icon {
+  color: #bbb;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.store-search-card-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+}
+
+.store-search-card-input::placeholder {
+  color: #bbb;
+}
+
+.store-results-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.store-results-footer {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #ebebeb;
+}
+
+.store-results-count {
+  font-size: 13px;
+  color: #888;
+}
+
+.store-chips {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.store-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 3px 10px 3px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+}
+
+.store-chip button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #aaa;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+
+.store-chip button:hover {
+  color: #e53935;
+}
+
+.store-chips-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffa500;
+  padding: 3px 6px;
+  transition: opacity 0.15s;
+}
+
+.store-chips-clear:hover {
+  opacity: 0.75;
 }
 
 .custom-button {
@@ -48,16 +161,14 @@ body {
 
 .device-list-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 320px));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 12px;
   align-items: start;
-  justify-content: start;
   width: 100%;
 }
 
 .device-card {
   width: 100%;
-  max-width: 320px;
   cursor: pointer;
   transition:
     transform 0.3s ease-in-out,
@@ -246,42 +357,13 @@ body {
   align-items: center;
 }
 
-.store-search-container {
-  flex-grow: 1;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 100%;
-  margin: 0px;
-}
-
-.store-search-icon {
-  position: absolute;
-  left: 10px;
-  color: #999;
-  font-size: 16px;
-}
-
-.store-search-input {
-  width: 100%;
-  padding: 8px 8px 8px 36px; /* Додаємо відступ зліва для іконки */
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-@media (max-width: 768px) {
-  .store-col {
-    margin-bottom: 20px;
+@media (max-width: 950px) {
+  .store-filter-col {
+    display: none;
   }
 
-  .navbar-nav {
-    gap: 15px;
-  }
-
-  .search {
-    margin-bottom: 15px;
+  .store-body {
+    padding: 12px;
   }
 }
 
@@ -298,29 +380,6 @@ body {
   }
 }
 
-.device-scroll-wrapper {
-  width: 100%;
-}
-
-@media (max-width: 950px) {
-  .store-col {
-    display: none !important;
-    width: 100%;
-    margin-bottom: 20px;
-  }
-
-  .device-col {
-    width: 100%;
-    display: flex;
-    justify-self: center;
-  }
-}
-
-@media (max-width: 768px) {
-  .store-search-container {
-    display: flex;
-  }
-}
 
 /* AI Chat */
 .ai-chat-wrapper {
