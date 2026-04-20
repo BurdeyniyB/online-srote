@@ -716,35 +716,185 @@
   color: #444;
 }
 
-/* Marketplace tab */
+/* ── Marketplace tab ──────────────────────────────── */
 .admin-marketplace {
   padding: 24px;
 }
 
-.marketplace-buttons {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.marketplace-btn {
-  padding: 14px 28px;
-  border: 2px dashed #ddd;
-  border-radius: 10px;
+.marketplace-action-btn {
+  padding: 7px 14px;
+  border: 1px solid #ddd;
+  border-radius: 7px;
   background: #fff;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   color: #555;
   transition: all 0.15s;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
-.marketplace-btn:hover {
+.marketplace-action-btn:hover {
   border-color: #ffa500;
   color: #ffa500;
+}
+
+.marketplace-results-count {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+/* ── Admin device grid ────────────────────────────── */
+.admin-device-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+}
+
+.admin-device-card {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #ebebeb;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: box-shadow 0.15s;
+}
+
+.admin-device-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.11);
+}
+
+.admin-device-card--add {
+  border: 2px dashed #ddd;
+  background: #fafafa;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  min-height: 280px;
+  color: #bbb;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.admin-device-card--add:hover {
+  border-color: #ffa500;
+  color: #ffa500;
+  box-shadow: none;
+}
+
+.admin-add-icon {
+  font-size: 30px;
+}
+
+.admin-device-card--oos {
+  opacity: 0.65;
+  filter: grayscale(0.45);
+}
+
+.admin-card-id {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(26, 29, 46, 0.72);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+  z-index: 1;
+}
+
+.admin-card-img-wrap {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: #f8f9fa;
+}
+
+.admin-card-img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.admin-card-name {
+  padding: 10px 12px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.admin-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1d2e;
+  line-height: 1.3;
+}
+
+.admin-card-subtitle {
+  font-size: 11px;
+  color: #888;
+  line-height: 1.3;
+}
+
+.admin-card-meta {
+  padding: 4px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.admin-card-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+  color: #555;
+}
+
+.admin-card-price {
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-price-current {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1d2e;
+}
+
+.admin-price-old {
+  font-size: 11px;
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+.admin-price-sale-badge {
+  font-size: 10px;
+  background: #ff4444;
+  color: #fff;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.admin-card-actions {
+  padding: 8px 12px;
+  display: flex;
+  gap: 6px;
+  border-top: 1px solid #f2f2f2;
 }
 
 /* Dashboard / Discounts placeholder */

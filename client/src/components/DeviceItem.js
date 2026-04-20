@@ -63,7 +63,7 @@ const DeviceItem = observer(({ device }) => {
 
   return (
     <Card
-      className="device-card"
+      className={`device-card${!device.inStock ? " device-card--out-of-stock" : ""}`}
       border="light"
       onClick={() => {
         try {
@@ -117,6 +117,7 @@ const DeviceItem = observer(({ device }) => {
         onClick={addDeviceToBasket}
         className="basket-button"
         variant="gray"
+        disabled={!device.inStock}
       >
         <FaShoppingCart />
       </Button>

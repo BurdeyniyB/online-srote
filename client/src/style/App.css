@@ -204,6 +204,11 @@ body {
   border-color: #ffa500;
 }
 
+.basket-button:disabled {
+  background-color: #1a1d2e;
+  border-color: #1a1d2e;
+}
+
 .basket-button svg {
   color: white;
   transition: color 0.25s ease;
@@ -212,6 +217,15 @@ body {
 .basket-button:hover svg {
   color: #fff;
 }
+
+.device-card--out-of-stock .image-container,
+.device-card--out-of-stock .device-name,
+.device-card--out-of-stock .device-rating,
+.device-card--out-of-stock .device-price,
+.device-card--out-of-stock .basket-button {
+  filter: grayscale(1) opacity(0.45);
+}
+
 
 .currency {
   font-size: 0.9rem;

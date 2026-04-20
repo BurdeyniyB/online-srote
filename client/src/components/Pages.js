@@ -34,14 +34,17 @@ const Pages = observer(({ onLoadMore }) => {
       {remaining > 0 && (
         <button
           className="see-more-btn"
-          onClick={() => { onLoadMore?.(); device.setPage(current + 1); }}
+          onClick={() => {
+            onLoadMore?.();
+            device.setPage(current + 1);
+          }}
         >
           See more {nextPageCount} items
         </button>
       )}
 
       <div className="pages-wrapper">
-        <span className="pages-label">Pages:</span>
+        <span className="pages-label"></span>
         <Pagination className="mb-0">
           <Pagination.Prev
             disabled={current === 1}
@@ -58,7 +61,7 @@ const Pages = observer(({ onLoadMore }) => {
               >
                 {page}
               </Pagination.Item>
-            )
+            ),
           )}
           <Pagination.Next
             disabled={current === pageCount}

@@ -41,7 +41,7 @@ class DeviceController {
 
   async getAll(req, res) {
     try {
-      let { brandId, typeId, minPrice, maxPrice, sortBy, limit, page, search, minRating, inStockOnly, onSaleOnly } =
+      let { brandId, typeId, minPrice, maxPrice, sortBy, limit, page, search, minRating, inStockOnly, onSaleOnly, outOfStockOnly } =
         req.query;
       page = parseInt(page) || 1;
       limit = parseInt(limit) || 20;
@@ -65,11 +65,14 @@ class DeviceController {
             .filter((id) => !isNaN(id))
         : [];
 
+      const parsedId = parseInt(search, 10);
+      const idMatch = !isNaN(parsedId) && String(parsedId) === String(search).trim();
       const searchCondition = search
         ? {
             [Op.or]: [
               { name: { [Op.iLike]: `%${search}%` } },
               literal(`"device"."specs"::text ILIKE '%${search.replace(/'/g, "''")}%'`),
+              ...(idMatch ? [{ id: parsedId }] : []),
             ],
           }
         : {};
@@ -90,6 +93,7 @@ class DeviceController {
         ...(typeId && typeId.length ? { typeId: { [Op.in]: typeId } } : {}),
         ...(minRating ? { rating: { [Op.gte]: parseFloat(minRating) } } : {}),
         ...(inStockOnly === "true" ? { inStock: true } : {}),
+        ...(outOfStockOnly === "true" ? { inStock: false } : {}),
         ...(onSaleOnly === "true" ? { sale: { [Op.gt]: 0 } } : {}),
       };
 
@@ -147,6 +151,56 @@ class DeviceController {
     });
 
     return res.json(device);
+  }
+
+  async update(req, res, next) {
+    try {
+      const { id } = req.params;
+      let { name, description, price, brandId, typeId, info, inStock, sale } = req.body;
+      const device = await Device.findOne({ where: { id } });
+      if (!device) return next(ApiError.badRequest("Device not found"));
+
+      if (name !== undefined) device.name = name;
+      if (description !== undefined) device.description = description;
+      if (price !== undefined) device.price = Number(price);
+      if (brandId !== undefined) device.brandId = Number(brandId);
+      if (typeId !== undefined) device.typeId = Number(typeId);
+      if (inStock !== undefined) device.inStock = inStock === "true" || inStock === true;
+      if (sale !== undefined) device.sale = Number(sale) || 0;
+
+      if (req.files && req.files.img) {
+        let fileName = uuid.v4() + ".jpg";
+        await req.files.img.mv(path.resolve(__dirname, "..", "static", fileName));
+        device.img = fileName;
+      }
+
+      await device.save();
+
+      if (info !== undefined) {
+        await DeviceInfo.destroy({ where: { deviceId: id } });
+        const parsedInfo = JSON.parse(info);
+        await Promise.all(
+          parsedInfo.map((i) =>
+            DeviceInfo.create({ title: i.title, description: i.description, deviceId: id })
+          )
+        );
+      }
+
+      return res.json(device);
+    } catch (error) {
+      next(ApiError.badRequest(error.message));
+    }
+  }
+
+  async remove(req, res, next) {
+    try {
+      const { id } = req.params;
+      await DeviceInfo.destroy({ where: { deviceId: id } });
+      await Device.destroy({ where: { id } });
+      return res.json({ message: "Device deleted" });
+    } catch (error) {
+      next(ApiError.badRequest(error.message));
+    }
   }
 }
 
