@@ -8,18 +8,20 @@
 }
 
 .see-more-btn {
-  background-color: #111;
-  color: #fff;
-  border: none;
-  border-radius: 24px;
-  padding: 10px 32px;
-  font-size: 15px;
+  background: #fff;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  padding: 8px 28px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: border-color 0.15s, color 0.15s;
 }
 
 .see-more-btn:hover {
-  background-color: #333;
+  border-color: #ffa500;
+  color: #ffa500;
 }
 
 .pages-wrapper {
@@ -36,37 +38,48 @@
 
 .pages-wrapper .pagination {
   margin: 0;
+  gap: 3px;
 }
 
 .pages-wrapper .page-item .page-link {
-  background-color: #111;
-  color: #fff;
-  border-color: #111;
+  background: #fff;
+  color: #555;
+  border: 1px solid #ddd;
   border-radius: 6px !important;
-  margin: 0 2px;
-  min-width: 36px;
-  text-align: center;
+  margin: 0 1px;
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  padding: 0 8px;
+  transition: border-color 0.15s, color 0.15s;
 }
 
 .pages-wrapper .page-item.active .page-link {
-  background-color: #fff;
-  color: #111;
-  border-color: #111;
+  background: #ffa500;
+  border-color: #ffa500;
+  color: #fff;
+  font-weight: 600;
 }
 
 .pages-wrapper .page-item .page-link:hover {
-  background-color: #333;
-  border-color: #333;
-  color: #fff;
+  background: #fff;
+  border-color: #ffa500;
+  color: #ffa500;
 }
 
 .pages-wrapper .page-item.active .page-link:hover {
-  background-color: #f0f0f0;
-  color: #111;
+  background: #ffa500;
+  border-color: #ffa500;
+  color: #fff;
 }
 
 .pages-wrapper .page-item.disabled .page-link {
-  background-color: #555;
-  border-color: #555;
-  color: #aaa;
+  background: #fff;
+  border-color: #ddd;
+  color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
