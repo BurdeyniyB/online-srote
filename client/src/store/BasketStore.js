@@ -7,8 +7,13 @@ export default class BasketStore {
     makeAutoObservable(this);
   }
 
+  setBasketDevices(devices) {
+    this._basketDevices = Array.isArray(devices) ? devices : [];
+    this.saveToLocalStorage();
+  }
+
   setBasketDevice(basketDevice) {
-    if (basketDevice.length < 1) return;
+    if (!basketDevice || Array.isArray(basketDevice)) return;
 
     if (
       !this._basketDevices.some((d) => d.deviceId === basketDevice.deviceId)

@@ -3,29 +3,16 @@ import { Image } from "react-bootstrap";
 import { Context } from "..";
 import { destroyDeviceFromBasket } from "../http/basketAPI";
 import "../style/BasketItem.css";
-import { fetchDevices } from "../http/deviceAPI";
+import { fetchOneDevice } from "../http/deviceAPI";
 
 const BasketItem = ({ basketItem }) => {
-  const { user, device, basket } = useContext(Context);
+  const { user, basket } = useContext(Context);
   const [quantity, setQuantity] = useState(basketItem.quantity);
   const [userDevice, setUserDevice] = useState();
 
   useEffect(() => {
-    fetchDevices(
-      null,
-      null,
-      null,
-      null,
-      "date_desc",
-      1,
-      device.limit,
-      null,
-    ).then((data) => {
-      device.setDevices(data.rows);
-      device.setTotalCount(data.count);
-      setUserDevice(device.devices.find((d) => d.id === basketItem.deviceId));
-    });
-  }, []);
+    fetchOneDevice(basketItem.deviceId).then((data) => setUserDevice(data));
+  }, [basketItem.deviceId]);
 
   if (!userDevice) {
     return <div className="basket-item">Device not found</div>;

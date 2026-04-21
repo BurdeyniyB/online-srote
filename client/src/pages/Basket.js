@@ -12,7 +12,7 @@ const Basket = observer(() => {
 
   useEffect(() => {
     if (user.user.id) {
-      fetchBasket(user.user.id).then((data) => basket.setBasketDevice(data));
+      fetchBasket(user.user.id).then((data) => basket.setBasketDevices(data));
     }
   }, [basket, user]);
 

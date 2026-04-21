@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ADMIN_ROUTE,
@@ -19,6 +19,7 @@ import {
   FaBars,
   FaTimes,
 } from "react-icons/fa";
+import { fetchBasket } from "../http/basketAPI";
 import "../style/NavBar.css";
 import Filter from "./Filter";
 
@@ -29,13 +30,25 @@ const NavBar = observer(() => {
     0,
   );
   const [menuOpen, setMenuOpen] = useState(false);
+  const [basketLoaded, setBasketLoaded] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user.isAuth && user.user.id) {
+      fetchBasket(user.user.id)
+        .then((data) => basket.setBasketDevices(data))
+        .finally(() => setBasketLoaded(true));
+    } else {
+      setBasketLoaded(true);
+    }
+  }, [user.isAuth, user.user.id, basket]);
 
   const logOut = () => {
     user.setUser({});
     user.setIsAuth(false);
     localStorage.removeItem("token");
+    basket.clearBasket();
   };
 
   return (
@@ -70,7 +83,7 @@ const NavBar = observer(() => {
               >
                 <FaShoppingCart size={20} />
               </button>
-              {basketCount > 0 && (
+              {basketLoaded && basketCount > 0 && (
                 <span className="basket-badge">{basketCount}</span>
               )}
             </div>
@@ -162,7 +175,7 @@ const NavBar = observer(() => {
           >
             <FaShoppingCart size={24} />
           </button>
-          {basketCount > 0 && (
+          {basketLoaded && basketCount > 0 && (
             <span className="basket-badge">{basketCount}</span>
           )}
         </div>
