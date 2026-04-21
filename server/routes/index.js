@@ -11,6 +11,7 @@ const paymentRouter = require("./paymentRoutes");
 const addressRouter = require("./addressRouter");
 const aiRouter = require("./aiRouter");
 const dashboardRouter = require("./dashboardRouter");
+const promoRouter = require("./promoRouter");
 
 router.use("/user", userRouter);
 router.use("/device/type", typeRouter);
@@ -23,5 +24,6 @@ router.use("/payment", paymentRouter);
 router.use("/address", addressRouter);
 router.use("/ai", aiRouter);
 router.use("/dashboard", dashboardRouter);
+router.use("/promo", promoRouter);
 
 module.exports = router;

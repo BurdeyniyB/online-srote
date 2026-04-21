@@ -8,6 +8,7 @@ import {
 import AdminOrders from "../components/admin/AdminOrders";
 import AdminMarketplace from "../components/admin/AdminMarketplace";
 import AdminDashboard from "../components/admin/AdminDashboard";
+import AdminDiscounts from "../components/admin/AdminDiscounts";
 import "../style/Admin.css";
 
 const NAV_ITEMS = [
@@ -45,12 +46,7 @@ const Admin = () => {
 
         {activeTab === "orders" && <AdminOrders />}
 
-        {activeTab === "discounts" && (
-          <div className="admin-placeholder">
-            <h2>Discounts</h2>
-            <p>Coupon & promo management — coming soon.</p>
-          </div>
-        )}
+        {activeTab === "discounts" && <AdminDiscounts />}
       </main>
     </div>
   );

@@ -92,6 +92,14 @@ const OrderDevice = sequelize.define("order_device", {
   quantity: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 },
 });
 
+const PromoCode = sequelize.define("promo_code", {
+  id:          { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  code:        { type: DataTypes.STRING, unique: true, allowNull: false },
+  discount:    { type: DataTypes.INTEGER, allowNull: false },
+  description: { type: DataTypes.STRING, allowNull: true },
+  isActive:    { type: DataTypes.BOOLEAN, defaultValue: true },
+});
+
 const Address = sequelize.define("address", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   label: { type: DataTypes.STRING, allowNull: false },
@@ -154,4 +162,5 @@ module.exports = {
   Order,
   OrderDevice,
   Address,
+  PromoCode,
 };

@@ -4,13 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../style/OrderInfo.css";
 import { Context } from "..";
 import { CHECKOUT_ROUTE } from "../utils/const";
-
-// Mock promo codes → discount %
-const PROMO_CODES = {
-  SAVE5: 5,
-  WELCOME5: 5,
-  PROMO5: 5,
-};
+import { validatePromo } from "../http/promoAPI";
 
 const OrderInfo = observer(() => {
   const { basket, device, order, user } = useContext(Context);
@@ -18,6 +12,7 @@ const OrderInfo = observer(() => {
   const [subtotal, setSubtotal] = useState(0);
   const [promoInput, setPromoInput] = useState(order.appliedPromo);
   const [promoError, setPromoError] = useState("");
+  const [promoLoading, setPromoLoading] = useState(false);
 
   useEffect(() => {
     if (user.isAuth && user.user.email) {
@@ -34,14 +29,19 @@ const OrderInfo = observer(() => {
     setSubtotal(sum);
   }, [basket.basketDevices, device.devices]);
 
-  const handleApplyPromo = () => {
-    const code = promoInput.trim().toUpperCase();
-    if (PROMO_CODES[code]) {
-      order.setDiscount(PROMO_CODES[code], code);
-      setPromoError("");
-    } else {
+  const handleApplyPromo = async () => {
+    const code = promoInput.trim();
+    if (!code) return;
+    setPromoLoading(true);
+    setPromoError("");
+    try {
+      const result = await validatePromo(code);
+      order.setDiscount(result.discount, result.code);
+    } catch {
       order.clearDiscount();
       setPromoError("Invalid promo code.");
+    } finally {
+      setPromoLoading(false);
     }
   };
 
@@ -95,7 +95,9 @@ const OrderInfo = observer(() => {
             onChange={(e) => { setPromoInput(e.target.value); setPromoError(""); }}
             onKeyDown={handlePromoKeyDown}
           />
-          <button className="order-apply-btn" onClick={handleApplyPromo}>Apply</button>
+          <button className="order-apply-btn" onClick={handleApplyPromo} disabled={promoLoading}>
+            {promoLoading ? "…" : "Apply"}
+          </button>
         </div>
         {promoError && <span className="order-promo-error">{promoError}</span>}
         {order.discountPercent > 0 && !promoError && (
