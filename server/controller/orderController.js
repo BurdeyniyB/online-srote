@@ -2,6 +2,7 @@ const { randomBytes } = require("crypto");
 const { OrderDevice, Order, Device } = require("../models/models");
 const ApiError = require("../error/ApiError");
 const { Op } = require("sequelize");
+const { sendOrderConfirmation } = require("../services/mailer");
 
 function generateOrderNumber() {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -67,6 +68,17 @@ class OrderController {
           OrderDevice.create({ orderId: order.id, deviceId, quantity: quantity || 1 })
         )
       );
+
+      const deviceIds = devices.map((d) => d.deviceId);
+      Device.findAll({ where: { id: deviceIds } })
+        .then((found) => {
+          const items = devices.map(({ deviceId, quantity }) => {
+            const d = found.find((f) => f.id === deviceId);
+            return d ? { name: d.name, price: d.price, quantity: quantity || 1 } : null;
+          }).filter(Boolean);
+          return sendOrderConfirmation(order, items);
+        })
+        .catch((err) => console.error("[mailer] failed to send order confirmation:", err));
 
       return res.json({ order, orderDevices });
     } catch (error) {

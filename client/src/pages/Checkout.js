@@ -505,6 +505,13 @@ const Checkout = observer(() => {
   }, [user.isAuth]);
 
   const handleAddSave = async (form) => {
+    if (!user.isAuth) {
+      const tempId = `temp_${Date.now()}`;
+      setAddresses((prev) => [...prev, { ...form, id: tempId }]);
+      setSelectedAddress(tempId);
+      setModalOpen(false);
+      return;
+    }
     const created = await createAddress(form);
     setAddresses((prev) => [...prev, created]);
     setSelectedAddress(created.id);
@@ -512,6 +519,11 @@ const Checkout = observer(() => {
   };
 
   const handleEditSave = async (form) => {
+    if (!user.isAuth) {
+      setAddresses((prev) => prev.map((a) => (a.id === editingAddress.id ? { ...form, id: editingAddress.id } : a)));
+      setEditingAddress(null);
+      return;
+    }
     const updated = await updateAddress(editingAddress.id, form);
     setAddresses((prev) => prev.map((a) => (a.id === updated.id ? updated : a)));
     setEditingAddress(null);
@@ -519,7 +531,7 @@ const Checkout = observer(() => {
 
   const handleDelete = async (id, e) => {
     e.stopPropagation();
-    await deleteAddress(id);
+    if (user.isAuth) await deleteAddress(id);
     setAddresses((prev) => {
       const next = prev.filter((a) => a.id !== id);
       if (selectedAddress === id) setSelectedAddress(next[0]?.id ?? null);
